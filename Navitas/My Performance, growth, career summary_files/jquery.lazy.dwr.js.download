@@ -1,0 +1,10 @@
+(function($) {
+	$.lazy('lazyJSCalls', function(element, response) {
+		if(element.attr('data-loader') != null){
+			element.click();
+			element.removeAttr('data-loader');
+			element.removeAttr('onclick');
+			element.removeClass('lazy');
+		}
+    });
+})(window.jQuery || window.Zepto);

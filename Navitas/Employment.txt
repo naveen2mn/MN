@@ -1,0 +1,31 @@
+MR. NAVEEN M  | NVIN0227
+DATE OF JOINING (DDMMYYYY) :25 Jul 2014
+PDC 002 - SOFTWARE ENGINEER
+Min Experience - 3.0
+DATE OF JOINING - 25/07/2014
+RETIREMENT DATE (DDMMYYYY)-
+DESIGNATION	-	Software Engineer
+GRADE	-	B2
+DEPARTMENT	-	Product Development
+JOB DESCRIPTION	-	PDC 002 - Software Engineer
+LOCATION	-	Perungalathur
+STATUS
+CurrentE
+MPLOYMENT TYPE	-	Permanent
+COMPANY	-	Navitas LLPC
+ONFIRMATION DATE 	-	
+FUNCTION REGION	-	Chennai
+
+Grade - B1
+Designation	- Software Engineer
+Responsibilities
+. Executer in BigData technologies
+. Executer in Java server side coding
+. Executer in .NET technologies
+. Executer in Web application development
+. Develop Low to Medium complex reports/dashboards/ETL jobs based on the requirements
+. Participate in customer review meetings
+. Understand customer process/domain
+. Gather report requirements from Project Manager
+. Peer review of the deliverables
+. Adhere to company policies and procedures

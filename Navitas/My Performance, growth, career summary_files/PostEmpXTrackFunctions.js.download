@@ -1,0 +1,2139 @@
+$('#faq-wrapper h3').click(function() {		
+	$(this).next().slideToggle().fadeTo(500, 1.0);
+});
+
+$('.li_faq_panel h3').click(function() {		
+	$(this).next().slideToggle().fadeTo(500, 1.0);
+});
+
+$('.li_renderTip img').click(function() {		
+	$(this).next().slideToggle().fadeTo(500, 1.0);
+});
+
+ function showPageFaq(obj){
+	 var aId = $(obj); aId.next().slideToggle('slow');
+	aId.toggleClass("close-faq");       
+    
+ }
+
+ function runFaq()
+ {
+	var $faq = $('#faq');	
+    var $freeTrial = $('.free-trial');
+	var $faqTd = $('#faqtd');
+	var $faqTable = $('#faq table');
+	var $faqPanel = $('.li_faq_panel');
+	var $btn = $('.btn-1');
+
+	$freeTrial.css({'right':'52px'});
+
+	$btn.toggle(	function(){
+
+		if ($faq.width()>0)
+		{
+			$faq.animate({width: "0"}, 500);
+			$faqTd.animate({width: "0"}, 500);
+			$faqTable.css({'display':'none'});	
+			$faqPanel.css({'right':'-2px'});
+		}
+		else {			
+			$faq.animate({width:'500px'}, 500);
+			$faqTd.animate({width:'500px'}, 500);
+			$faq.css({'display':''});
+			$faqTable.fadeIn('2000');
+    		$faqPanel.css({'right':'0'});
+			$faq.css({'position':'relative'});
+			$btn.css({'position':'relative'});				
+		}
+	},
+	function()
+	{
+		if ($faq.width()>0)
+		{
+			$faq.animate({width: "0"}, 500);
+			$faqTd.animate({width: "0"}, 500);
+			$faqTable.css({'display':'none'});
+			$faqPanel.css({'right':'-2px'});
+		}
+		else {			
+			$faq.animate({width:'500px'}, 500);
+			$faqTd.animate({width:'500px'}, 500);
+			$faq.css({'display':''});
+			$faqTable.fadeIn('2000');
+			$faqPanel.css({'right':'0'});
+			$faq.css({'position':'relative'});
+			$btn.css({'position':'relative'});		
+		}
+	});
+};
+
+function closeFaq()
+{
+		var $faq = $('#faq');		
+		var $faqTd = $('#faqtd');
+		var $faqTable = $('#faq table');
+		var $faqPanel = $('.li_faq_panel');
+
+
+		$faq.animate({width: "0"}, 500);
+		$faqTd.animate({width: "0"}, 500);
+		$faqTable.css({'display':'none'});			
+		$faqPanel.css({'right':'-2px'});
+}
+
+dwr.util.useLoadingMessage = function() {
+  var loadingMessage = "Loading...";
+
+  dwr.engine.setPreHook(function() {
+    var disabledZone = dwr.util.byId('disabledZone');
+    if (!disabledZone) {
+      disabledZone = document.createElement('div');
+      disabledZone.setAttribute('id', 'disabledZone');
+      disabledZone.style.position = "fixed";
+      disabledZone.style.zIndex = "99999";
+      disabledZone.style.left = "0";
+      disabledZone.style.top = "0";
+      disabledZone.className = "ajaxloaderDisabledZone";
+      disabledZone.style.height = "100%";
+      disabledZone.style.width = "100%";
+      // IE need a background color to block click. Use an invisible background.
+      if (window.ActiveXObject) {
+        disabledZone.style.background = "white";
+        disabledZone.style.filter = "alpha(opacity=0)";
+      }
+      document.body.appendChild(disabledZone);
+      var messageZone = document.createElement('div');
+      messageZone.setAttribute('id', 'messageZone');
+      messageZone.style.position = "fixed";
+	  messageZone.style.zIndex = "999999999";
+      messageZone.style.top = "40%";
+      messageZone.style.right = "45%";     
+      messageZone.style.color = "white";
+	  messageZone.className = "ajaxloaderMessageZone";
+      messageZone.style.fontFamily = "Arial,Helvetica,sans-serif";
+      messageZone.style.padding = "4px";
+      document.body.appendChild(messageZone);
+      var text = document.createTextNode(loadingMessage);
+      messageZone.appendChild(text);
+      dwr.util._disabledZoneUseCount = 1;
+    }
+    else {
+      dwr.util.byId('messageZone').innerHTML = loadingMessage;
+      disabledZone.style.visibility = 'visible';
+      dwr.util._disabledZoneUseCount++;
+      dwr.util.byId('messageZone').style.visibility = 'visible';
+    }
+  });
+  dwr.engine.setPostHook(function() {
+    dwr.util._disabledZoneUseCount--;
+    if (dwr.util._disabledZoneUseCount == 0) {
+      dwr.util.byId('disabledZone').style.visibility = 'hidden';
+      dwr.util.byId('messageZone').style.visibility = 'hidden';
+    }
+  });
+};
+
+function selectCheckbox(obj)
+	{
+		var x = document.getElementsByName(obj);
+		for(var k=0;k<x.length;k++)
+			{
+				if(x[k].checked)
+					{
+						x[k].parentNode.parentNode.className = "selected";
+					}
+				else
+					{
+						x[k].parentNode.parentNode.className = "unselected";
+					}
+			}
+	}
+
+function selectMe2(obj)
+	{	
+		var sThisVal,sVal2 = 1;	 
+		var objElem = $(obj).parent().parent();
+		var radioName = $("[name='emp']");
+		var radioSelect = $("[name='selectAll']");
+		objElem.toggleClass("selected");
+		objElem.addClass('bb');		
+		if($(obj).prop('checked')==false){ radioSelect.prop('checked', false);}
+		radioName.each(function () {
+			sThisVal = (this.checked ? "1" : "0");
+				if(sThisVal == '0'){
+				   sVal2 = sThisVal;
+					return false;
+				}
+		});	
+    if(sVal2 == '1'){radioSelect.prop('checked', true);}
+	}
+
+function selectCheckbox2(obj)
+	{
+		var x = document.getElementsByName(obj);
+		for(var k=0;k<x.length;k++)
+			{
+				if(x[k].checked)
+					{
+						x[k].parentNode.parentNode.parentNode.className = "selected";
+					}
+				else
+					{
+						x[k].parentNode.parentNode.parentNode.className = "unselected";
+					}
+			}
+	}
+
+function selectMe3(obj)
+{	var sThisVal,sVal2 = 1;	 
+    var radioName = $("[name='appraisee']");
+	var radioSelect = $("[name='selectAll']");
+	var objElem = $(obj).parent().parent().parent();
+		objElem.toggleClass("selected");
+		objElem.addClass('bb');		
+	 if($(obj).prop('checked')==false){ radioSelect.prop('checked', false);}
+	 radioName.each(function () {
+		sThisVal = (this.checked ? "1" : "0");
+		if(sThisVal == '0'){
+        sVal2 = sThisVal;
+		return false;
+		}
+	});	
+    if(sVal2 == '1'){radioSelect.prop('checked', true);}
+}
+
+
+
+
+
+
+function jConfirmCancel()
+{
+	
+	return false;
+}
+
+function jConfirm(msg,title,okCallBack)
+{	
+	if (typeof label_confirmation === 'undefined' || label_confirmation === null)
+		label_confirmation = 'Confirmation message';
+
+	if (typeof label_ok === 'undefined' || label_ok === null)
+		label_ok = 'OK';
+
+	if (typeof label_cancel === 'undefined' || label_cancel === null)
+			label_cancel = 'Cancel';
+
+	if(title == '' )		
+		title = label_confirmation;
+	
+	BootstrapDialog.show({
+		title: title,
+		message: msg,
+		draggable: true,
+		buttons: [{
+			label: label_ok,
+			cssClass: 'btn-success',
+			action:okCallBack
+		},{
+			label: label_cancel,
+			action: function(dialogRef){
+				dialogRef.close();
+			}
+		}]
+	});
+	
+}
+
+
+function jConfirmWithOkAndCancelEvent(msg,title,okCallBack,cancelCallBack)
+{	
+	if (typeof label_confirmation === 'undefined' || label_confirmation === null)
+		label_confirmation = 'Confirmation message';
+
+	if (typeof label_ok === 'undefined' || label_ok === null)
+		label_ok = 'OK';
+
+	if (typeof label_cancel === 'undefined' || label_cancel === null)
+			label_cancel = 'Cancel';
+
+	if(title == '' )		
+		title = label_confirmation;
+	
+	BootstrapDialog.show({
+		title: title,
+		message: msg,
+		draggable: true,
+		buttons: [{
+			label: label_ok,
+			cssClass: 'btn-success',
+			action:okCallBack
+		},{
+			label: label_cancel,
+			action:cancelCallBack
+		}]
+	});
+	
+}
+
+function jAlert(msg,title,elem)
+{
+
+	if (typeof label_alert === 'undefined' || label_alert === null)
+		label_alert = 'Information';
+
+	if (typeof label_ok === 'undefined' || label_ok === null)
+		label_ok = 'OK';
+	
+	if(title == null || title =='' )
+		title = label_alert;
+
+	BootstrapDialog.show({
+		title: title,
+		message: msg,
+        draggable: true,
+		buttons: [{
+			label: label_ok,
+			action: function(dialog) {
+				dialog.close();
+				if(elem != null){
+				  elem.focus();
+				}
+			}
+		}]
+	});
+	
+}
+
+
+function EmailValidation(elem){
+	var email = elem.value;
+		
+	var valid = "y";
+
+
+	if (email != "") {
+		if (email.length<7 ||
+		   email.indexOf("@.") != -1 ||
+		   email.indexOf("-.") != -1 ||
+		   email.indexOf("_.") != -1 ||
+		   email.indexOf("..") != -1 ||
+		   email.indexOf("._") != -1 ||
+		   email.indexOf(".-") != -1 ||
+		   email.indexOf(".@") != -1 ||
+		   email.indexOf("@-") != -1 ||
+		   email.indexOf("@_") != -1 ||
+		   email.indexOf("@") != email.lastIndexOf("@") ||
+		   email.indexOf("@") == -1 ||
+		   email.indexOf(".") == -1 ||
+		   (email.length - (email.lastIndexOf(".") + 1)) < 2) {
+		   valid = "n";
+		   jAlert("The e-mail address you entered is invalid .",'',elem);		   
+		   return false;
+		 }
+	else {
+		a = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789@-_.";
+		b = 0;
+		while (b < email.length) {
+			if (a.indexOf(email.charAt(b)) == -1) {
+			 valid = "n";
+			 jAlert("The e-mail address may not contain \"" + email.charAt(b) + "\".",'',elem);
+			 
+			 b = email.length;
+		   }
+		  b = b + 1;
+		}
+	  }
+	  }
+	 
+	if (valid == "y") {		
+	rx = /^[a-z0-9\._-]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.[a-z][a-z]$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.aero$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.biz$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.coop$|^[a-z0-9\._-]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.com$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.edu$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.gov$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.info$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.int$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.mil$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.museum$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.name$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.fitness$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.net$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.org$|^[a-z0-9\._]*[a-z0-9_]@[a-z0-9][a-z0-9\-\.]*[a-z0-9]\.pro$/i;
+
+	   if (rx.test(email)) {
+		  rx = /^[a-z0-9_]/i;
+		  if(!(rx.test(email))) {
+			 valid = "n";
+			 jAlert("The e-mail address you entered is invalid .",'',elem);
+			 
+			  return false;
+		  }
+	   }else {
+		 valid = "n";
+		 jAlert("The e-mail address you entered is invalid .",'',elem);		
+		 return false;
+	  }
+	}
+	if (valid == "y") {
+		
+	return true;
+
+	}
+
+}
+
+
+function dateValidation(date,elem) {
+	if( isInteger(checkParam(date)) ) {
+		jAlert("Date should have a format "+applicableFormat,'',elem);
+		return false;
+	}
+	else {
+		var arg = isDate(TrimAll(checkParam(date)), applicableFormat);
+		if(!arg){
+			jAlert("Invalid date specified",'',elem);
+			return false;
+		}else return true;
+		
+	}
+}
+
+
+
+function changeInlineCalendarFilter(executeFunctionCall){
+	var filter  = document.getElementById('selectedCalendarId').value;
+	if(filter == "customDates"){
+		document.getElementById('_sDate').value="";
+		document.getElementById('_eDate').value="";
+		document.getElementById('customizeDate').style.display="";
+		document.getElementById('customizeDateGo').style.display="";		
+	}else{
+		document.getElementById('customizeDate').style.display="none";
+		document.getElementById('customizeDateGo').style.display="none";
+		eval(executeFunctionCall);
+	}		
+}
+
+
+
+
+
+function getSelectedRadioValueByGroupName(elementName){
+	var selectedValue="";
+	var elements = document.getElementsByName(elementName);
+	if(elements!=null && elements.length > 0){
+		for(var i=0;i<elements.length;i++){
+			if(elements[i].type=="radio" && elements[i].checked){
+				selectedValue = elements[i].value;
+				return selectedValue;
+			}
+		}
+	}
+	 return selectedValue;
+}
+
+function currentThemeColor() {
+	/*var currentColor = "#3399FF";
+	if($('.top-menus').length > 0){
+		 currentColor =$('.top-menus').css('background-color');
+	}
+	if(currentColor.indexOf("#") == 0){
+		 return currentColor;
+	}
+	if(currentColor == "rgb(146, 181, 8)"){
+		currentColor = "#92B508";
+	}else if (currentColor == "rgb(237, 161, 53)"){
+		currentColor = "#EDA135";
+	}else if (currentColor == "rgb(198, 144, 244)"){
+		currentColor = "#C690F4";
+	}else if (currentColor == "rgb(94, 153, 219)"){
+		currentColor = "#5E99DB";
+	}else*/{
+		currentColor = "#404040";	
+	}		
+	 return currentColor;
+}
+
+function showDropDown(){
+	$(".dropdown-tabs").css("display","block");
+};
+function hideDropDown(){
+	$(".dropdown-tabs").css("display","none");
+};
+function showInstructions(obj)
+{	
+	$(obj).find('div').slideToggle();
+};
+
+$(window).scroll (function(){
+	if($(window).scrollTop() >= 160)
+		 {
+		    $(".pos-att-button2").addClass("fix-form-name");
+			$(".pos-att-button").addClass("fix-form-emp-attr");
+			$("#white-bg").addClass("display-it");
+			$("#white-bg-grey").addClass("white-bg-grey display-it");
+		    $("#header-app").addClass("pos-next-button-fix-dropdown");
+			$("#button-fix").addClass("pos-next-button-fix");
+			$("#appraisal-head").addClass("appraisal-head-fixed");
+		    /*$("#stop-on-scroll").addClass("fix-panel");
+			$("#stop-on-scroll2").addClass("fix-panel-emp");*/
+			$("#stop-on-scroll3").addClass("fix-preport-btn");
+		 }
+		else
+		{
+		 $(".pos-att-button2").removeClass("fix-form-name");	
+		 $(".pos-att-button").removeClass("fix-form-emp-attr");
+		 $("#white-bg").removeClass("display-it");	
+	     $("#white-bg-grey").removeClass("white-bg-grey display-it");	
+		 $("#header-app").removeClass("pos-next-button-fix-dropdown");		
+		 $("#button-fix").removeClass("pos-next-button-fix");
+		 $("#appraisal-head").removeClass("appraisal-head-fixed");
+        /* $("#stop-on-scroll").removeClass("fix-panel");
+		  $("#stop-on-scroll2").removeClass("fix-panel-emp"); */
+		 $("#stop-on-scroll3").removeClass("fix-preport-btn");
+		}
+	}
+  );
+
+function shownextdiv(obj){ 
+	 var p = $(obj).parent('div').siblings("div");
+	var r= $(obj).parent('.block-heading')
+	$(obj).parent('div').siblings('div').children('div').children('div.profile-action').css("display","none");
+	  $(obj).siblings('a').removeClass("dvt");
+      p.slideToggle(500);
+	  r.toggleClass("alt");
+	  /* $(".block-heading").not(r).addClass('alt');
+     $(".block-content").not(p).slideUp(500); */
+    };
+
+function showHidePanel(obj){
+	var pw= $(obj).siblings('div').not('#display_page_emp_filter');
+	var pt=$(obj);
+
+	pw.slideToggle();
+	$(obj).parent('div').siblings('div').not('#enableEmpFilterOption').children('div').not(pw).slideUp();
+    $(obj).toggleClass('active');
+	//$(obj).parent('div').siblings('div').children('a').not(pt).removeClass('active');
+ };
+
+function hidePanel(obj){
+    $(obj).parent('div').slideUp();
+	  $(obj).parent('div').siblings('a').removeClass('active');
+  };
+
+function showHideChildPanel(obj){	
+	 var $allPanels = $('span').find('#panel');
+	 var pw= $(obj).find('#panel');
+	 $allPanels.not(pw).removeClass('display-it');
+	 pw.toggleClass('display-it');
+ };
+
+function initilizeScrillBar() {	
+	
+	if ( $.browser && $.browser.version.substr(0,1) <= 8 ) {
+		 var li = $("<li>");
+		 li.attr("class", "for-ie8b");
+		 li.html("<a href=''></a>");
+	
+		 for(i=0; i<5; i++){
+			 $(".jcarousel ul li:last").after(li.clone());			
+         }
+		  
+		  $('.jcarousel-control-prev').data('data-jcarouselcontrol','false');
+	};
+
+    $(function() {
+
+
+        var jcarousel = $('.jcarousel');         
+        jcarousel
+            .on('jcarousel:reload jcarousel:create', function () {
+                var width = jcarousel.innerWidth();
+
+                if (width >= 600) {
+                    width = width / 5;
+                }
+				 else if (width >= 500) {
+                    width = width / 4;
+                }
+				else if (width >= 350) {
+                    width = width / 2;
+                }
+
+                jcarousel.jcarousel('items').css('width', width + 'px');
+            })
+            .jcarousel({
+                wrap: 'circular'
+            });
+
+        $('.jcarousel-control-prev')
+            .jcarouselControl({
+                target: '-=1'
+            });
+
+        $('.jcarousel-control-next')
+            .jcarouselControl({
+                target: '+=1'
+            });
+       
+		
+        $('.jcarousel-pagination')
+            .on('jcarouselpagination:active', 'a', function() {
+                $(this).addClass('active');
+            })
+            .on('jcarouselpagination:inactive', 'a', function() {
+                $(this).removeClass('active');
+            })
+            .on('click', function(e) {
+                e.preventDefault();
+            })
+            .jcarouselPagination({
+                perPage: 1,
+                item: function(page) {
+                    return '<a href="#' + page + '">' + page + '</a>';
+                }
+            });
+        
+		if ( $.browser && $.browser.version.substr(0,1) <= 8 ) {	
+
+			  $('.jcarousel-control-next').on('click','.jcarousel-control-prev', function(){
+				  $(this).data('data-jcarouselcontrol','true');  
+			  });	
+
+			  var tcount = $('.jcarousel ul li').size();
+			 
+			  for(i = 0; i < 5; i++, tcount--)
+			  {   
+				  if($(".jcarousel-pagination a[href='"+ "#" + tcount +"']"))
+				  {				     
+					 $(".jcarousel-pagination a[href='"+ "#" + tcount +"']").hide();
+				  }
+			  }
+		};
+         
+    });
+};
+
+$(function() {
+	  $('#accountImageMobile').click(function () {
+		 $('#over-menu').animate({ left: '0' }, 600);
+		 $('#display480').animate({ left: '240px' }, 600);
+	  });
+
+	  $('#close').click(function () {
+		 $('#over-menu').animate({ left: '-240px' }, 600);
+		 $('#display480').animate({ left: '0' }, 600);
+	  });
+
+	});
+
+
+function initializeCKEditor(){		
+	$('textarea[id^="ckEditor_"]').each(function(){
+			CKEDITOR.replace(this.id, {			
+			allowedContent: false
+		});		
+	});
+}
+
+ function gridviewScroll() {
+	 if(document.getElementById("availabilityCalendarTbl") != null){
+		 var curDisplayWidth = 1320;
+		 if(document.getElementById("curFrozenGridDisplayWidth") != null){
+			 curDisplayWidth = document.getElementById("curFrozenGridDisplayWidth").value;
+		 }
+		
+		 var gridViewScroll = new GridViewScroll({
+			elementID : "availabilityCalendarTbl",
+			freezeColumn : true,
+			 width: curDisplayWidth,
+             height: 425,
+			 freezeColumnCssClass : "GridViewScrollItemFreeze",
+		});
+		gridViewScroll.enhance();
+	 }else{
+		gridviewScrollDepricated();
+	 }
+	
+ }
+
+ function gridviewScrollDepricated() {
+	$('.component table').each(function() {
+		if($(this).find('thead').length > 0 && $(this).find('th').length > 0) {
+			// Clone <thead>
+			var $w	   = $(window),
+				$t	   = $(this),
+				$thead = $t.find('thead').clone(),
+				$col   = $t.find('thead, tbody').clone();
+
+			// Add class, remove margins, reset width and wrap table
+			$t
+			.addClass('sticky-enabled')
+			.css({
+				margin: 0,
+				width: '100%'
+			}).wrap('<div class="sticky-wrap" />');
+
+			if($t.hasClass('overflow-y')) $t.removeClass('overflow-y').parent().addClass('overflow-y');
+
+			// Create new sticky table head (basic)
+			$t.after('<table class="sticky-thead" />');
+
+			// If <tbody> contains <th>, then we create sticky column and intersect (advanced)
+			if($t.find('tbody th').length > 0) {
+				$t.after('<table class="sticky-col" /><table class="sticky-intersect" />');
+			}
+
+			// Create shorthand for things
+			var $stickyHead  = $(this).siblings('.sticky-thead'),
+				$stickyCol   = $(this).siblings('.sticky-col'),
+				$stickyInsct = $(this).siblings('.sticky-intersect'),
+				$stickyWrap  = $(this).parent('.sticky-wrap');
+
+			$stickyHead.append($thead);
+
+			$stickyCol
+			.append($col)
+				.find('thead th:gt(0)').remove()
+				.end()
+				.find('tbody td').remove();
+
+			$stickyInsct.html('<thead><tr><th>'+$t.find('thead th:first-child').html()+'</th></tr></thead>');
+			
+			// Set widths
+			var setWidths = function () {
+					$t
+					.find('thead th').each(function (i) {
+						$stickyHead.find('th').eq(i).width($(this).width());
+					})
+					.end()
+					.find('tr').each(function (i) {
+						$stickyCol.find('tr').eq(i).height($(this).height());
+					});
+
+					// Set width of sticky table head
+					$stickyHead.width($t.width());
+
+					// Set width of sticky table col
+					$stickyCol.find('th').add($stickyInsct.find('th')).width($t.find('thead th').width())
+				},
+				repositionStickyHead = function () {
+					// Return value of calculated allowance
+					var allowance = calcAllowance();
+				
+					// Check if wrapper parent is overflowing along the y-axis
+					if($t.height() > $stickyWrap.height()) {
+						// If it is overflowing (advanced layout)
+						// Position sticky header based on wrapper scrollTop()
+						if($stickyWrap.scrollTop() > 0) {
+							// When top of wrapping parent is out of view
+							$stickyHead.add($stickyInsct).css({
+								opacity: 1,
+								top: $stickyWrap.scrollTop()
+							});
+						} else {
+							// When top of wrapping parent is in view
+							$stickyHead.add($stickyInsct).css({
+								opacity: 0,
+								top: 0
+							});
+						}
+					} else {
+						// If it is not overflowing (basic layout)
+						// Position sticky header based on viewport scrollTop
+						if($w.scrollTop() > $t.offset().top && $w.scrollTop() < $t.offset().top + $t.outerHeight() - allowance) {
+							// When top of viewport is in the table itself
+							$stickyHead.add($stickyInsct).css({
+								opacity: 1,
+								top: $w.scrollTop() - $t.offset().top
+							});
+						} else {
+							// When top of viewport is above or below table
+							$stickyHead.add($stickyInsct).css({
+								opacity: 0,
+								top: 0
+							});
+						}
+					}
+				},
+				repositionStickyCol = function () {
+					if($stickyWrap.scrollLeft() > 0) {
+						// When left of wrapping parent is out of view
+						$stickyCol.add($stickyInsct).css({
+							opacity: 1,
+							left: $stickyWrap.scrollLeft()
+						});
+					} else {
+						// When left of wrapping parent is in view
+						$stickyCol
+						.css({ opacity: 0 })
+						.add($stickyInsct).css({ left: 0 });
+					}
+				},
+				calcAllowance = function () {
+					var a = 0;
+					// Calculate allowance
+					$t.find('tbody tr:lt(3)').each(function () {
+						a += $(this).height();
+					});
+					
+					// Set fail safe limit (last three row might be too tall)
+					// Set arbitrary limit at 0.25 of viewport height, or you can use an arbitrary pixel value
+					if(a > $w.height()*0.25) {
+						a = $w.height()*0.25;
+					}
+					
+					// Add the height of sticky header
+					a += $stickyHead.height();
+					return a;
+				};
+
+			setWidths();
+
+			$t.parent('.sticky-wrap').scroll($.throttle(250, function() {
+				repositionStickyHead();
+				repositionStickyCol();
+			}));
+
+			$w
+			.load(setWidths)
+			.resize($.debounce(250, function () {
+				setWidths();
+				repositionStickyHead();
+				repositionStickyCol();
+			}))
+			.scroll($.throttle(250, repositionStickyHead));
+		}
+	});
+}
+function markMessageReadByMessageId(messageId) {
+	if(messageId==null || trim(messageId)==""){
+		return false;
+	}
+	adrh.executeCall('MessageHandler',messageId, 'markMessagesRead', '', '', {async:defaultAsyncValue,callback:function(dwrResponse){
+	}});
+}
+
+function initializeMaskFormat(){
+		$.mask.definitions['X']="[A-Z,a-z]";
+		$.mask.definitions['#']="[0-9]";
+		$('input[name^="maskFormat_"]').each(function(){
+			var curElement = this;
+			var maskFormat = document.getElementById(curElement.id+"_maskFormat");
+			if(maskFormat!=null && maskFormat.value.length>0){
+				$(curElement).mask(maskFormat.value);
+			}
+		});
+
+	}
+
+function clickFirstColounmByActionId(actionId) {	
+	if(actionId !=null){
+		var fn = document.getElementById(actionId).getAttribute("onclick");
+		var fnCall = fn.split(";")[0];
+		fnCall = fnCall.replace("return ", "");
+		// alert(fn + " and call= " + fnCall);
+		eval(fnCall);
+	}
+	return false;
+}
+
+function ppdForEmpxtrackFeedback() {	
+	adrh.viewAllRecords('AjaxSearchHandler','ppdForEmpxtrackFeedback', '', '', {async:defaultAsyncValue, callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+	 }});
+}
+
+function saveEmpxtrackFeedback(calledFrom) {
+	var empxtrack_feedback_by_client = "" ;
+	var empxtrack_feedback_subject_by_client = "" ;
+	var checkAnonymousSubmit="";
+	var checkAnonymousSubmitValue="false";
+	var filters="";
+	if(document.getElementById("empxtrack_feedback_by_client") != null){
+		empxtrack_feedback_subject_by_client = document.getElementById("empxtrack_feedback_subject_by_client").value; 
+		if(trim(empxtrack_feedback_subject_by_client) == ""){
+		 jAlert(c_feedback_subject);
+		 return false;
+		}
+		empxtrack_feedback_by_client = document.getElementById("empxtrack_feedback_by_client").value; 
+		if(trim(empxtrack_feedback_by_client) == ""){
+		 jAlert(c_feedback_comment);
+		 return false;
+		}
+		var customerEmpxtrackFeedbackType = document.getElementById("selectedClientFeedbackType").value;  
+		checkAnonymousSubmit = document.getElementById("checkAnonymousSubmit");
+		if(checkAnonymousSubmit.checked == true){
+			checkAnonymousSubmitValue= "true";
+		}
+		filters=empxtrack_feedback_subject_by_client+"#"+checkAnonymousSubmitValue;
+		ga('send', 'event', { eventCategory: 'AjaxSearchHandler', eventAction: 'executeCall', eventLabel: "feedbackByClientOnEmpxtrackApp"});
+		adrh.executeCall('AjaxSearchHandler',empxtrack_feedback_by_client, 'feedbackByClientOnEmpxtrackApp', filters,customerEmpxtrackFeedbackType, {async:defaultAsyncValue, callback:function(dwrResponse) {
+			if(document.getElementById("errorMsg") != null){
+				displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+				
+				if(calledFrom == 'fromBreadcrumbBar'){
+					closePanel();
+				}else{
+					closeFancyBox();
+				}
+			}
+		}});
+	}	
+}
+
+function highlightSection(elementId,selectedClientFeedbackType){
+	document.getElementById("selectedClientFeedbackType").value = selectedClientFeedbackType;
+	var elementDtls = document.getElementsByName('clientFeedback-icon');
+	if(elementDtls !=null && elementDtls.length >0 ){
+		for(var i = 0; i < elementDtls.length; i++){
+			var currOption = elementDtls[i];
+			if(currOption.id == elementId){
+				currOption.className = currOption.className + " selected-icon";
+			}else{
+				currOption.className = currOption.className.replace(" selected-icon", "");
+			}
+		}
+	}
+}
+
+
+
+function writeBreadCrumbData(){
+	
+	var scriptCode = document.getElementById("__runBreadcrumbScript");	
+	if(scriptCode != null) {
+		eval(scriptCode.innerHTML);
+		dwr.util.setValue("display_breadCrum", __breadCrumbValue, {escapeHtml:false});
+	}
+	scriptCode = document.getElementById("__runFAQInternalEval");
+	if(scriptCode != null) {
+		eval(scriptCode.innerHTML);
+		if(__faqData != null && __faqData.length > 0) {
+			dwr.util.setValue("display_faq_options", __faqData, {escapeHtml:false});
+			dwr.util.byId("display_faq_options").style.display="";
+			if(document.getElementById("display_free_trial_option") != null){
+				dwr.util.byId("display_free_trial_option").setAttribute("style", "padding-right:56px");
+			}
+		}else {
+			if(document.getElementById("display_free_trial_option") != null){
+				dwr.util.byId("display_free_trial_option").setAttribute("style", "padding-right:10px");
+			}
+		}
+	}
+	scriptCode = document.getElementById("__runBreadcrumbMainTitleScript");
+	if(scriptCode != null) {
+		eval(scriptCode.innerHTML);
+		dwr.util.setValue("display_breadCrum_title", __breadCrumbTitle, {escapeHtml:false});
+	}
+
+	var empFilterOption = document.getElementById("empFilterEnabled")
+	if(empFilterOption != null && empFilterOption.value == "yes")
+	{				
+		 if(document.getElementById("enableEmpFilterOption") != null)
+			 document.getElementById("enableEmpFilterOption").style.display='';
+		
+	}
+	
+	// display the page filters and quick links if any
+	displayQuickLinksOnPage();
+	//displayFiltersOnPage();
+
+	var welcomePageFreeTrialContent = getCookie("welcomePageFreeTrialContent");	
+	if(welcomePageFreeTrialContent == "closed"){
+		enableAndStartHopScotchTour();
+	}
+
+	// Display data filters
+	displayDataFilterContainer();
+
+}
+
+function initToggleEmpFilter(){
+	$(".empFilterBox").toggle("slow");	
+}
+
+// Invoke this to diplay the filters on the page.
+function displayFiltersOnPage() {
+	var scriptCode = document.getElementById("__runPageFilterScript");
+	if(scriptCode != null) {	
+		eval(scriptCode.innerHTML);
+	}
+}
+
+
+function displayQuickLinksOnPage() {
+	var scriptCode = document.getElementById("__runPageQuickLinksScript");
+	if(scriptCode != null) {	
+		eval(scriptCode.innerHTML);
+	}
+}
+
+
+
+// The following method will need to be invoked from document.onReadyState and invokes hopscotch
+function enableAndStartHopScotchTourJS(enableButton, startTour){
+	var hopscotchButton = document.getElementById('enableHopscotchTour');
+	if(typeof hopscotchButton !== 'undefined' && hopscotchButton !== null && enableButton === 'true'){
+		hopscotchButton.style.display='';
+	}
+	if(startTour === 'true')
+		initHopscotchTour();
+}
+
+function initHopscotchTour() {
+	if(typeof calloutTour !== 'undefined') {
+		hopscotch.startTour(calloutTour);
+	}else {
+		var hopscotchButton = document.getElementById('enableHopscotchTour');
+		if(hopscotchButton != null)
+			hopscotchButton.style.display='none';
+		//alert("Sorry....I could not find the tour. Please contact support!");
+	}
+}
+
+function enableSelectedShortCut(selectedFnId)	{
+	var x = document.getElementsByName("n_function");
+	for(var k=0;k<x.length;k++)
+	{		
+		if(selectedFnId == x[k].id)
+			{
+				x[k].parentNode.className = "filter active";
+			}
+		else
+			{
+				x[k].parentNode.className = "filter";
+			}
+	}
+}
+function initToggleShortCut(){
+	var quickLinkMenuStatus = getCookie("quickLinkMenuStatus");
+	if(quickLinkMenuStatus == "")
+		quickLinkMenuStatus = "open";
+	if(quickLinkMenuStatus == "open"){
+		document.getElementById('leftPanelFilterSection').style.display ="none";
+		document.getElementById("rightPanelContentSection").className='col-md-12 rightpenel';
+		document.getElementById("setPositionMyshortcutmenuClose").style.display ="";
+		document.getElementById("setPositionMyshortcutmenuOpen").style.display ="none";
+		setCookie("quickLinkMenuStatus", "closed", 1);
+
+	}else{
+		document.getElementById('leftPanelFilterSection').style.display ="";
+		document.getElementById("rightPanelContentSection").className='col-md-10 rightpenel';
+		document.getElementById("setPositionMyshortcutmenuClose").style.display ="none";
+		document.getElementById("setPositionMyshortcutmenuOpen").style.display ="";
+		setCookie("quickLinkMenuStatus", "open", 1);
+	}
+
+}
+
+
+function initToggleSliderShortCut(){
+	$("#setPositionMyshortcutmenuClose").toggleClass("manu-scroll-down manu-scroll-close");
+	$(".populatedShortCutMenuWithSliderEffect").slideToggle( "slow");
+	if (document.getElementById("backgroudWelcomePageFreeTrial").style.display == "none") {
+		document.getElementById("backgroudWelcomePageFreeTrial").style.display= '';
+	}else{
+		document.getElementById("backgroudWelcomePageFreeTrial").style.display= 'none';
+	}
+} 
+
+function initToggleSlider(){
+	$("#setPositionMyshortcutmenuClose").toggleClass("manu-scroll-down manu-scroll-close");
+	$(".home_tabs").slideToggle("slow");
+	if (document.getElementById("backgroudWelcomePageFreeTrial").style.display == "none") {
+		document.getElementById("backgroudWelcomePageFreeTrial").style.display= '';
+	}else{
+		document.getElementById("backgroudWelcomePageFreeTrial").style.display= 'none';
+	}
+} 
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i].trim();
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length,c.length);
+        }
+    }
+    return "";
+} 
+
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+d.toUTCString();
+    document.cookie = cname + "=" + cvalue + "; " + expires;
+}
+
+function le(empId){
+	var url ="masquerade.do?activity=submit&searchId=" + empId + "&taskAction=masquerade";
+	window.location.href=url;
+	return false;
+}
+
+function le2(empId, mod){
+	var url ="masquerade.do?activity=submit&searchId=" + empId + "&taskAction=masquerade&redirectUrl=/runet.do?activity=submit^mod="+mod;
+	window.location.href=encodeURI(url);
+	return false;
+}
+
+
+var popupBlockerChecker = {
+	check: function(popup_window){
+		var _scope = this;
+		if (popup_window) {
+			if(/chrome/.test(navigator.userAgent.toLowerCase())){
+				setTimeout(function () {
+					_scope._is_popup_blocked(_scope, popup_window);
+				 },200);
+			}else{
+				popup_window.onload = function () {
+					_scope._is_popup_blocked(_scope, popup_window);
+				};
+			}
+		}else{
+			_scope._displayError();
+		}
+	},
+	_is_popup_blocked: function(scope, popup_window){
+		if ((popup_window.innerHeight > 0)==false){ scope._displayError(); }
+	},
+	_displayError: function(){
+		alert("Popup Blocker is enabled! Please add this site to your exception list.");
+	}
+};
+
+
+
+
+function inputFormattedText(controlId){
+	var contentValue = document.getElementById(controlId).value;
+	$(".modal-dialog").css({width:'800px'}); 
+	ga('send', 'event', { eventCategory: 'LetterGenerationHandler', eventAction: 'viewAllRecords', eventLabel: 'getInputFormattedContent'});
+	adrh.viewAllRecords('AjaxSearchHandler','getInputFormattedContent', contentValue, controlId,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+		initializeCKEditor();
+	 }});
+}
+
+function updateInputFormattedText(controlId){
+	var formattedContentValue = CKEDITOR.instances.ckEditor_inputFormattedText.getData();
+	document.getElementById(controlId).value = formattedContentValue;
+	closeFancyBox();
+}
+
+function insertAtCaret(areaId, text) {
+	var txtarea = document.getElementById(areaId);
+	if (!txtarea) { return; }
+
+	var scrollPos = txtarea.scrollTop;
+	var strPos = 0;
+	var br = ((txtarea.selectionStart || txtarea.selectionStart == '0') ?
+		"ff" : (document.selection ? "ie" : false ) );
+	if (br == "ie") {
+		txtarea.focus();
+		var range = document.selection.createRange();
+		range.moveStart ('character', -txtarea.value.length);
+		strPos = range.text.length;
+	} else if (br == "ff") {
+		strPos = txtarea.selectionStart;
+	}
+
+	var front = (txtarea.value).substring(0, strPos);
+	var back = (txtarea.value).substring(strPos, txtarea.value.length);
+	txtarea.value = front + text + back;
+	strPos = strPos + text.length;
+	if (br == "ie") {
+		txtarea.focus();
+		var ieRange = document.selection.createRange();
+		ieRange.moveStart ('character', -txtarea.value.length);
+		ieRange.moveStart ('character', strPos);
+		ieRange.moveEnd ('character', 0);
+		ieRange.select();
+	} else if (br == "ff") {
+		txtarea.selectionStart = strPos;
+		txtarea.selectionEnd = strPos;
+		txtarea.focus();
+	}
+
+	txtarea.scrollTop = scrollPos;
+}
+
+function showHideSectionHeaderDetails(){
+
+	if($('.section-header').height() < 70){
+		 $('.section-header').animate({
+			height: $('.section-header').get(0).scrollHeight
+		 }, 500, function(){
+			$('.section-header').height('auto');
+		 });
+		
+	}else{
+		 $('.section-header').animate({height: '70px'}, 500);
+	}
+}
+
+function showHideAppraisalBoxDetails(){
+
+	if($('.box-help-appraisal').height() < 70){
+		 $('.box-help-appraisal').animate({
+			height: $('.box-help-appraisal').get(0).scrollHeight
+		 }, 500, function(){
+			$('.box-help-appraisal').height('auto');
+		 });
+		
+	}else{
+		 $('.box-help-appraisal').animate({height: '70px'}, 500);
+	}
+}
+
+function downloadHTMLInCSV(reportInHtmlString,fileName) {
+	dwr.util.useLoadingMessage();
+	adrh.executeCall('DWRCustomReportHandler',reportInHtmlString,'downLoadHtmlsInCSV','',fileName,{async:false,callback:function(dwrResponse) {
+		dwr.engine.openInDownload(dwrResponse.responseTeo.dataObject);
+	}});
+	return false;
+}
+
+function initToggleFilter(toggleFilter){
+	if(toggleFilter == 'true') {
+		$("#display_content_data_filter").slideToggle('slow');
+		$("#mainFilter").toggleClass("open");
+		if($('#mainFilter').hasClass('open') == true){
+			setCookie("__filterStatus", "open", 1);
+		}else{
+			setCookie("__filterStatus", "closed", 1);
+		}
+	}else{
+		var val = getCookie("__filterStatus");
+		if(document.getElementById("display_content_data_filter") != null){
+			if(val == "" || val == 'closed') {
+				$("#display_content_data_filter").slideUp('slow');
+				$("#mainFilter").removeClass("open");
+			}else{
+				$("#display_content_data_filter").slideDown('slow');
+				$("#mainFilter").addClass("open");
+			}
+		}
+	}
+}
+
+function display360PulseFeedbackOnBreadcrumbBar(){
+	ga('send', 'event', { eventCategory: 'MessageHandler', eventAction: 'viewAllRecords', eventLabel: 'dispPulse360FeedbackOnActivityPage'});
+	adrh.viewAllRecords('MessageHandler','display360PulseFeedbackOnBreadcrumbBar', '', 'onPopup',{async:true,callback:function(dwrResponse) {
+		dwr.util.setValue("360PulseFeedbackOnBreadcrumbBar", dwrResponse.response,{ escapeHtml:false });
+	}});	
+}
+
+function saveFeedbackForEmployee(){
+	var noteTypeValue = -1;
+	var empId = dwr.util.getValue('employeeName_hidden');
+	if(parseInt(empId) == -1){
+		jAlert("Please select a valid Employee.");
+		return false;
+	}
+	var commonNotes = dwr.util.getValue('feedback');	
+	if(trim(commonNotes) == ""){
+		jAlert("Please specify the feedback");
+		return false;
+	}
+	var pulseRating = dwr.util.getValue('pulseRating');
+	if(pulseRating == "" || pulseRating <= 0){
+		jAlert("Please specify the rating.");
+		return false;
+	}
+	var tempTeo = new Object();
+	tempTeo.message = commonNotes;
+	tempTeo.empId = empId;
+	tempTeo.module = "Pulse360Feedback";
+	tempTeo.p7 = noteTypeValue;
+	tempTeo.p8 = pulseRating;
+	tempTeo.visibleTo = 3;
+	var teoInfoInString = JSON.stringify(tempTeo);
+	ga('send', 'event', { eventCategory: 'CommonNotesHandler', eventAction: 'saveRecord', eventLabel: 'saveTeo'});
+	adrh.saveRecord('CommonNotesHandler',teoInfoInString,'saveTeo','saigun.empxtrack.appraisalII.teo.JournalTEO','',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsgOnPopup", dwrResponse.errorMsg,"failure");
+			
+		}else{
+			closePanel();
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+			
+			if(document.getElementById('display360PulseFeedbackResult') != null){
+				display360PulseFeedbackResult();
+			}
+		}}
+	});
+}
+
+function dispMyAttendanceOnBreadcrumbBar(){
+	ga('send', 'event', { eventCategory: 'AttendanceHandler2', eventAction: 'viewAllRecords', eventLabel: 'dispMyAttendanceOnActivityPage'});
+	adrh.viewAllRecords('AttendanceHandler2','dispMyAttendanceOnActivityPage', 'fromBreadcrumbBar', '',{async:true,callback:function(dwrResponse) {
+		dwr.util.setValue("myAttendanceOnBreadcrumbBar", dwrResponse.response,{ escapeHtml:false });
+	}});
+}
+
+function markTodayAttendanceFromBreadCrumbBar(attendanceDate, empId, dayMode){
+	var errorMsg = "";
+	ga('send', 'event', { eventCategory: 'AttendanceHandler', eventAction: 'executeCall', eventLabel: 'MarkTodayAttendance'});
+	adrh.executeCall('AttendanceHandler2', empId,'markAttendance',dayMode,'',{async:defaultAsyncValue,callback:function(dwrResponse) {		
+		dispMyAttendanceOnBreadcrumbBar();
+	}});
+}
+function confirmToEndDayFromBreadCrumbBar(attendanceDate, empId, dayMode){			
+	jConfirm(a_attendance_myAttendanceConfirmMarkDayClose, '', function(r)
+	{
+		r.close();
+		markTodayAttendanceFromBreadCrumbBar(attendanceDate, empId, dayMode);
+	});			
+}
+function viewAllQuickLinkOnBreadcrumbBar() {
+	ga('send', 'event', { eventCategory: 'QuickLinkAndNewsEventHandler', eventAction: 'viewAllRecords', eventLabel: 'displayQuickLink'});
+	adrh.viewAllRecords('QuickLinkAndNewsEventHandler','displayQuickLink', 'fromBreadcrumbBar', '', {async:true,callback:function(dwrResponse) {
+		dwr.util.setValue("quickLinksAndShortcutsOnBreadcrumbBar", dwrResponse.response,{ escapeHtml:false });
+	}});
+}
+
+function viewAllNewsAndEventOnBreadcrumbBar() {
+	ga('send', 'event', { eventCategory: 'QuickLinkAndNewsEventHandler', eventAction: 'viewAllRecords', eventLabel: 'displayNewsAndEvent'});
+	adrh.viewAllRecords('QuickLinkAndNewsEventHandler','displayNewsAndEvent','fromBreadcrumbBar', '', {async:true,callback:function(dwrResponse) {
+		dwr.util.setValue("newsAndEventsOnBreadcrumbBar", dwrResponse.response,{ escapeHtml:false });
+	}});
+}
+
+function viewAllActiveThoughtOnBreadcrumbBar() {
+	ga('send', 'event', { eventCategory: 'TFTDHandler', eventAction: 'viewAllRecords', eventLabel: 'displayThought'});
+	adrh.viewAllRecords('TFTDHandler','displayThought', 'fromBreadcrumbBar', 'TFTDHandler.displayMode', {async:true,callback:function(dwrResponse) {
+		dwr.util.setValue("thoughtForTheDayOnBreadcrumbBar", dwrResponse.response,{ escapeHtml:false });
+	}});
+}
+function getCustomerFeedbackOnBreadcrumbBar() {	
+	adrh.viewAllRecords('AjaxSearchHandler','ppdForEmpxtrackFeedback', 'fromBreadcrumbBar', '', {async:defaultAsyncValue, callback:function(dwrResponse) {
+		dwr.util.setValue("customerFeedbackOnBreadcrumbBar", dwrResponse.response,{ escapeHtml:false });
+	 }});
+}
+
+function closePanel() {	
+	$(".instruction").slideUp("slow");	
+}
+
+
+function showEmpRelationShipOnBreadcrumbBar() {
+	ga('send', 'event', { eventCategory: 'MessageHandler', eventAction: 'viewAllRecords', eventLabel: 'showEmpRelationShipDetails'});
+	adrh.viewAllRecords('MessageHandler','showEmpRelationShipDetails','','',{async:true,callback:function(dwrResponse){
+		dwr.util.setValue("empRelationshipOnBreadcrumbBar", dwrResponse.response,{escapeHtml:false });
+		lazyload();
+	}});
+}
+
+function viewPollQuestionOnBreadcrumbBar() {
+	ga('send', 'event', { eventCategory: 'PollMasterHandler', eventAction: 'viewAllRecords', eventLabel: 'displayPoll'});
+	adrh.viewAllRecords('PollMasterHandler','displayPoll', 'fromBreadcrumbBar', '', {async:true,callback:function(dwrResponse) {
+		dwr.util.setValue("viewPollOnBreadcrumbBar", dwrResponse.response,{escapeHtml:false });
+	}});
+}
+
+function savePollResult(pollIndex){
+	var pollTeo="saigun.empxtrack.ajax.ajaxpagehandlers.commons.teo.PollResultTeo";
+	var tempTeo = new Object();
+	var teoInfoInString ="" ;
+	var optionsObj = document.getElementsByName("DynamicRadioBox");
+	var ratingId=-1;
+	var choiceChosen="";
+	for(var i=0;i<optionsObj.length;i++){
+		if(optionsObj[i].checked){
+			ratingId=i;
+			choiceChosen=optionsObj[i].value;
+		}
+	}
+	if(ratingId==-1){
+		jAlert(a_selectOption);
+		return false;
+	}
+	tempTeo.pollMasterId=dwr.util.getValue("pollMasterId"+pollIndex);
+	tempTeo.resultId=dwr.util.getValue("pollresultId"+pollIndex);
+	tempTeo.ratingId=ratingId;
+	tempTeo.choiceChosen=choiceChosen;
+	teoInfoInString = JSON.stringify(tempTeo);
+	ga('send', 'event', { eventCategory: 'PollResultHandler', eventAction: 'saveRecord', eventLabel: 'saveTeo'});
+	adrh.saveRecord('PollResultHandler',teoInfoInString,'saveTeo', pollTeo,'',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsgOnPopup", dwrResponse.errorMsg,"failure");
+			
+		}else{
+			closePanel();
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+			
+		}
+	}});
+}
+
+function showChatMessageBox() {
+	ga('send', 'event', { eventCategory: 'MessageHandler', eventAction: 'viewAllRecords', eventLabel: 'sendWishMessage'});
+	adrh.viewAllRecords('MessageHandler','showChatMessageBox','','',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("showChatMessageBoxOnBreadcrumbBar", dwrResponse.response,{escapeHtml:false });
+	}});
+}
+
+function addSelfTimeCardEntry(tsDate,empId){
+	var timesheetTEO = new Object();
+	timesheetTEO.tsDate = tsDate;
+	timesheetTEO.empId = empId;
+	timesheetTEO.p1 = "addNewCheckIn";
+	var managerMode = "";
+	if(document.getElementById("managerMode") != null){
+		managerMode = document.getElementById("managerMode").value;
+	}
+	var strObj = JSON.stringify(timesheetTEO);
+	adrh.viewAllRecords('TimesheetHandler','addSelfTimeCardEntry',strObj,managerMode,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("addSelfTimeCardEntryOnBreadcrumbBar", dwrResponse.response,{escapeHtml:false });
+		
+		var hrDiv = document.getElementById('hrs').value;
+		var minuteDiv = document.getElementById('minutes').value;
+		if(hrDiv != null && minuteDiv != null){
+			$('.hrTime').timepicker({showPeriodLabels:false,showMinutes:false,showLeadingZero:false});	
+			$('.MinuteTime').timepicker({showPeriodLabels:false,showHours:false,showMinutesLeadingZero:false,minutes:{starts: 0,ends: 59,interval: 1},rows:6});
+		}	
+	}});
+	
+}
+
+
+function sendChatMessageToSelectedEmployee() {
+	var empId = dwr.util.getValue('employeeName_hidden');
+	var messageContent=dwr.util.getValue("chatMessageContent");
+	if(messageContent == ""){
+		jAlert(a_enterMessage);
+		return false;
+	}
+	ga('send', 'event', { eventCategory: 'MessageHandler', eventAction: 'executeCall', eventLabel: 'sendWishMessage'});
+	adrh.executeCall('MessageHandler', empId,'sendWishMessage',messageContent,'fromBreadcrumbBar',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsgOnPopup", dwrResponse.errorMsg,"failure");
+			
+		}else{
+			closePanel();
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+			
+		}
+	}});
+}
+
+function showOrgChartForLoginOnFreeTrial(){
+	if(document.getElementById("orgChartForLogin").style.display == "none"){
+		document.getElementById("orgChartForLogin").style.display = "block";
+	}else
+		document.getElementById("orgChartForLogin").style.display = "none";
+}
+
+function saveTimeCardEntry(enterTime,modeOfSaving){
+	var managerMode = "";
+	var empId = "";
+	var tsDate = "";
+	if(document.getElementById("managerMode") != null){
+		managerMode = document.getElementById("managerMode").value;
+	}
+	if(document.getElementById("empId") != null){
+		empId = document.getElementById("empId").value;
+	}
+	if(document.getElementById("tsDate") != null){
+		tsDate = document.getElementById("tsDate").value;
+	}
+	var timesheetTEO = new Object();
+	var props = ['timePeriodId','projectId','activityId','hrs','minutes','headerId','tsDate','empId','comments'];
+	for(var i = 0; i < props.length; i++){
+		timesheetTEO[props[i]] = dwr.util.getValue(props[i]);
+	}
+	if(validateTimesheetEmp(timesheetTEO) == false){
+		return false;
+	}
+	if(enterTime != 'hours'){
+		timesheetTEO.starttimehrs = dwr.util.getValue('starttimehrs');
+		timesheetTEO.starttimeminutes = dwr.util.getValue('starttimeminutes');
+		timesheetTEO.endtimehrs = dwr.util.getValue('endtimehrs');
+		timesheetTEO.endtimeminutes = dwr.util.getValue('endtimeminutes');
+	}
+	timesheetTEO.headerId = '-1';
+	timesheetTEO.p1 = 'Initiated'; // if user is adding time.
+	var strObj = JSON.stringify(timesheetTEO);
+	adrh.executeCall('TimesheetHandler',strObj,'insertRow','','',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		if(dwrResponse.error==true){
+			displayConfirmationMsg("errorMsgOnPopup", dwrResponse.errorMsg,"failure");
+			
+		}else{
+			if(modeOfSaving == "saveAndAddMore"){
+				addSelfTimeCardEntry(tsDate,empId);
+				displayConfirmationMsg("errorMsgOnpopUp", dwrResponse.notificationMsg,"success");
+				
+			}else{
+				closePanel();
+				displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+				
+				if(document.getElementById('dispMyTimeSheetDetails') != null){
+					 dispMyTimeSheetDetails();
+				}
+			}
+		}
+	}});
+}
+
+function validateTimesheetEmp(timesheetTEO){
+	if(timesheetTEO.projectId == "-1"){
+		jAlert('Please select a project.');
+		return false;
+	}
+	if(timesheetTEO.activityId == "-1"){
+		jAlert('Please select an activity.');
+		return false;
+	}
+	
+	var checkForMaxTime = document.getElementById("checkForMaxTime").value;
+	var allowOnWeekend = document.getElementById("allowOnWeekend").value;
+	var allowOnHoliday = document.getElementById("allowOnHoliday").value;
+	var allowOnLeave = document.getElementById("allowOnLeave").value;
+	var allowExecssHours = document.getElementById("allowExecssHours").value;
+	var maxTimesheetHrs = document.getElementById("maxTimesheetHrs").value;
+	var maxAllowdHrs = maxTimesheetHrs * 60;
+	var dayStatus = "";
+	if(document.getElementById(timesheetTEO.tsDate) != null ){
+		dayStatus =	document.getElementById(timesheetTEO.tsDate).value;
+	}
+	if(timesheetTEO.hrs == '')
+		timesheetTEO.hrs = "00";
+	if(timesheetTEO.minutes == '')
+		timesheetTEO.minutes = "00";
+	if(timesheetTEO.projectId < 0){
+		return true;
+	}
+	var isPrjAllowOutsideDate = document.getElementById('isAllowOutside-'+timesheetTEO.projectId).value;
+	var projectstartdate = document.getElementById('prjStDate-'+timesheetTEO.projectId).value;
+	var projectenddate = document.getElementById('prjEndDate-'+timesheetTEO.projectId).value;		
+	if(checkForMaxTime == 'yes' && allowExecssHours == 'no'){
+		var totTime = parseInt(timesheetTEO.hrs,10) * 60 + parseInt(timesheetTEO.minutes,10);
+		if(totTime > maxAllowdHrs){
+			jAlert('You are exceeding the number of hours allowed in a day. Please correct.','',document.getElementById('hrs'));
+			return false;
+		}
+	}
+	if(allowOnWeekend == 'no' && dayStatus == 'Weekend'){
+		jAlert('You are setting time on a Weekend which is not allowed. Please correct.');
+		return false;
+	}
+	if(allowOnHoliday == 'no' && dayStatus == 'Holiday'){
+		jAlert('You are setting time on a Holiday which is not allowed. Please correct.');
+		return false;
+	}
+	if(allowOnLeave == 'no' && (dayStatus == 'Leave' || dayStatus == 'Leave-Partial')){
+		jAlert('You are setting time on a Leave which is not allowed. Please correct.');
+		return false;
+	}
+	if(isPrjAllowOutsideDate == '0.0' && (projectstartdate != "" || projectenddate != "")){
+		var date1Arr = getStandardDateFormat(projectstartdate);
+		var date2Arr = getStandardDateFormat(projectenddate);
+		var date3Arr = getStandardDateFormat(timesheetTEO.tsDate);
+		var diff1 = getDifferenceInDays(date1Arr,date3Arr);
+		var diff2 = getDifferenceInDays(date3Arr,date2Arr);
+		if(diff1 < 0 || diff2 < 0){
+			jAlert('You can not make entry out side project start date('+projectstartdate+') and end date('+projectenddate+').');
+			return false;
+		}
+	}
+}
+
+function calculateTimeSheetHrsFromBreadCrumb(){
+	var inH = document.getElementById("starttimehrs").value;
+	var inM = document.getElementById("starttimeminutes").value;
+	var outH = document.getElementById("endtimehrs").value;
+	var outM = document.getElementById("endtimeminutes").value;	
+	if(inH.length == 0){
+		return false;
+	}
+	if(inM.length == 0){
+		return false;
+	}
+	if(outH.length == 0){
+		return false;
+	}	
+	if(outM.length == 0){
+		return false;
+	}
+	var inHour = parseInt(inH, 10);
+	var inMinute = parseInt(inM, 10);
+	var outHour = parseInt(outH, 10);
+	var outMinute = parseInt(outM, 10);
+	if(inMinute > outMinute){
+		outMinute = outMinute + 60;
+		outHour = outHour - 1;
+	}
+	if(outHour < inHour){
+		outHour = outHour + 24;
+	}
+	
+	var totHrs = outHour - inHour;
+	var totMinutes = outMinute - inMinute;
+	document.getElementById("hrs").value = totHrs;
+	document.getElementById("minutes").value = totMinutes;
+}
+
+function UpdateActivity(option){
+	adrh.executeCallWithJsonOutput('TimesheetHandler',option.value,'getActivities','','activityId,name',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		var activityAr = eval(dwrResponse.responseTeo.dataObject);
+		dwr.util.removeAllOptions('activityId');
+		dwr.util.addOptions('activityId',[{activityId:-1, name:'---Select---'}],'activityId','name');
+		dwr.util.addOptions('activityId',activityAr,'activityId','name');
+	}});
+}
+
+function showMyShortCutsOnBreadcrumbBar(){
+	ga('send', 'event', { eventCategory: 'TransferRightsHandler', eventAction: 'viewAllRecords', eventLabel: 'displayQuickLinksOnActivityPage'});
+	adrh.viewAllRecords('TransferRightsHandler','displayQuickLinksOnActivityPage', 'fromBreadcrumbBar','', {async:true,callback:function(dwrResponse){
+		dwr.util.setValue("showMyShortCutsOnBreadcrumbBar", dwrResponse.response,{escapeHtml:false });
+		initilizeScrillBar();
+	}});
+}
+
+function displayDataFilterContainer() {
+	if(document.getElementById("currentPageDataFilter") != null ){
+		var dataFilterContent = document.getElementById("currentPageDataFilter").innerHTML;
+		if(dataFilterContent.length > 0){
+			dwr.util.setValue("currentPageDataFilter", "",{ escapeHtml:false });
+			dwr.util.setValue("enablePageDataFilter", dataFilterContent,{ escapeHtml:false });
+		}
+	}
+}
+
+
+var employeeIdToredirect=-1;
+var calledfrom ="";
+function viewRewardPopUpGlobalInvocation(empId){
+	employeeIdToredirect = empId;
+	ga('send', 'event', { eventCategory: 'ManageRewardConfigration', eventAction: 'viewAllRecords', eventLabel: 'setContextEmpForWorkflowMode'});
+	adrh.executeCall('ManageRewardConfigration', empId,'setContextEmpForWorkflowMode','','',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsgOnPopup", dwrResponse.errorMsg,"failure");
+		}else{
+			ga('send', 'event', { eventCategory: 'ManageRewardConfigration', eventAction: 'viewAllRecords', eventLabel: 'viewRewardPage'});
+			adrh.viewRecordForEdit('ManageRewardConfigration','','viewRewardPage',empId,'',{async:defaultAsyncValue,callback:function(dwrResponse) {
+				showFancyBox(dwrResponse.response);
+			}});
+		}
+	}});
+}
+
+function viewDisciplinaryPopUpGlobalInvocation(empId,mode){
+	calledfrom = mode;
+	ga('send', 'event', { eventCategory: 'ManageDisciplinaryIncident', eventAction: 'executeCall', eventLabel: 'setContextEmpForWorkflowMode'});	
+	adrh.executeCall('ManageDisciplinaryIncident', empId,'setContextEmpForWorkflowMode','','',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsgOnPopup", dwrResponse.errorMsg,"failure");
+		}else{
+			ga('send', 'event', { eventCategory: 'ManageDisciplinaryIncident', eventAction: 'viewRecordForEdit', eventLabel: 'viewDisciplinaryPage'});	
+			adrh.viewRecordForEdit('ManageDisciplinaryIncident','','viewDisciplinaryPage',empId,'',{async:defaultAsyncValue,callback:function(dwrResponse) {
+				showFancyBox(dwrResponse.response);
+				initializeCalendar();
+			}});
+		}
+	}});
+}
+
+
+
+function getDisciplinaryType(selectedDisciplinaryIndex){
+	var index = selectedDisciplinaryIndex -1;
+	var disciplinaryIdValue = document.getElementById('disciplinaryTypeId'+index).value;
+	var disciplinaryName = document.getElementById('disciplinaryTypeName'+index).value;
+	var discpName = document.getElementById('fk_disciplinarytype');
+	discpName.value = disciplinaryName;
+	var discpTypeId = document.getElementById('disciplinaryTypeId');
+	discpTypeId.value = disciplinaryIdValue;
+}
+
+function getInitTeoManageDisciplinaryIncident(){
+		var CidTEO = new Object();
+		CidTEO.disciplinaryTypeId = dwr.util.getValue("disciplinaryTypeId");
+		CidTEO.fk_disciplinarytype = dwr.util.getValue("fk_disciplinarytype");
+		CidTEO.employeenumber = trim(dwr.util.getValue("empId"));
+		CidTEO.employeename = trim(dwr.util.getValue("empName"));
+		CidTEO.broughtnoticeby = dwr.util.getValue("broughtnoticeby");
+		CidTEO.boughtNoticeName = dwr.util.getValue("boughtNoticeName");
+		CidTEO.date =dwr.util.getValue("startDate")+"";
+		CidTEO.description = dwr.util.getValue("description");
+		CidTEO.actiontaken = dwr.util.getValue("actiontaken");
+		return 	CidTEO;
+}
+
+function postStartAjaxManageDisciplinaryIncident(errorMsg,workflowId) {
+	if(errorMsg.indexOf('Exception')>=0){
+		errorMsg="<div class='err'>There is some problem while fatching record.</div>";
+	}
+	ga('send', 'event', { eventCategory: 'ManageDisciplinaryIncident', eventAction: 'viewRecordForEdit', eventLabel: 'setErrMsgOnSession'});
+	adrh.viewRecordForEdit('ManageDisciplinaryIncident','','setErrMsgOnSession', errorMsg,'', {async:defaultAsyncValue,callback:function(dwrResponse) {
+		closeFancyBox();
+		displayConfirmationMsg("errorMsg", errorMsg,"success");
+		
+	}});
+}
+
+function validateManageDisciplinaryIncident(){
+	var disciplinaryTypeIndex = document.getElementById('disciplinaryTypeId').selectedIndex;
+	if(disciplinaryTypeIndex<= 0){
+		jAlert(a_discipline_selectTypeOfAction);
+		return false;
+	}
+	var disciplinaryDate = document.getElementById('startDate').value;
+	if(trim(disciplinaryDate)== ""){
+		jAlert(a_discipline_specifyIncidentDate);
+		return false;
+	}
+	var currentDateValue = document.getElementById("currentDate").value;
+	if(compareDates(disciplinaryDate,currentDateValue)==1){
+		jAlert(a_discipline_incorrectIncidentDate);
+		return false;
+	}
+	return true;
+}
+
+function setWFVariablesManageDisciplinaryIncident(){
+	document.getElementById("curPersistenceClass").value="saigun.empxtrack.persistencehelpers.DisciplinaryPersistence";
+	document.getElementById("workflowType").value="DisciplinaryData";
+	document.getElementById("wfAction").value="create-submit";
+}
+
+function getBudgetByRewawrdType(selectedRewardIndex){
+	var index = selectedRewardIndex -1;
+	var rewardBudgetValue = document.getElementById('rewardTypeId'+index).value;
+	var budgetMasterCell = document.getElementById('currRewardMasterBudget');
+	var budgetCell = document.getElementById('rewardBudgetCell');
+	var rewardTypeName = document.getElementById('fk_rewardtype');
+	var rewardName = document.getElementById('rewardTypeName'+index).value;
+	rewardTypeName.value = rewardName;
+	if(trim(rewardBudgetValue) == ""){
+		budgetCell.innerHTML="-";
+		budgetMasterCell.value = "0";
+	}else{
+		budgetCell.innerHTML=rewardBudgetValue;
+		budgetMasterCell.value = rewardBudgetValue;
+	}
+}
+
+function getInitTeoManageRewardConfigration(){
+	var hris_RewardDetailsTEO = new Object();
+	hris_RewardDetailsTEO.rewardtypeid = dwr.util.getValue("rewardType");
+	hris_RewardDetailsTEO.fk_rewardtype = dwr.util.getValue("fk_rewardtype");
+	hris_RewardDetailsTEO.employeenumber = trim(dwr.util.getValue("empId"));
+	hris_RewardDetailsTEO.rewardformempId = dwr.util.getValue("rewardFromId");
+	hris_RewardDetailsTEO.details =dwr.util.getValue("description");
+	hris_RewardDetailsTEO.rewardeeName = dwr.util.getValue("rewardeeName");
+	hris_RewardDetailsTEO.rewardform = dwr.util.getValue("rewardform");
+	hris_RewardDetailsTEO.rewarddate = dwr.util.getValue("currentDate")+"";
+	hris_RewardDetailsTEO.p1 = dwr.util.getValue("currentTimePeriod");
+	hris_RewardDetailsTEO.p2 = dwr.util.getValue("currRewardMasterBudget");
+	return 	hris_RewardDetailsTEO;
+}
+
+function postStartAjaxManageRewardConfigration(errorMsg,workflowId) {
+	if(errorMsg.indexOf('Duplicate Record')>=0){
+		errorMsg=err_duplicateRecord;
+	}
+	if(errorMsg.indexOf('Excep7/20/2018tion')>=0){
+		errorMsg=err_errorDuringFetch;
+	}
+	adrh.viewRecordForEdit('ManageRewardConfigration','','setErrMsgOnSession', errorMsg,'', {async:defaultAsyncValue,callback:function(dwrResponse) {
+		closeFancyBox();
+		displayConfirmationMsg("errorMsg", errorMsg,"success");
+		
+	}});
+}
+
+function validateManageRewardConfigration(){
+	var empIndex=dwr.util.getValue("seletedEmp");
+	if(empIndex == -1){
+		jAlert(a_manpower_selectEmployee);
+		return false;
+	}
+	var rewardTypeIndex = document.getElementById('rewardType').selectedIndex;
+	if(rewardTypeIndex<= 0){
+		jAlert(a_rewards_selectRewardType);
+		return false;
+	}
+	var rewardMasterBudget = document.getElementById('currRewardMasterBudget').value;
+	if(trim(rewardMasterBudget) == "" && rewardMasterBudget == "-"){
+		jAlert(a_rewards_rewardPointsNotAvailable);
+		return false;
+	}
+	if(parseInt(rewardMasterBudget)>0 ){
+		var availablePoints = document.getElementById("validateBudget").value;
+		if(trim(availablePoints)!= ""){
+			if(availablePoints == "no"){
+				jAlert(a_rewards_rewardPointsNotAvailable);
+				return false;
+			} else if((parseInt(availablePoints)-parseInt(rewardMasterBudget))< 0){
+				jAlert(a_rewards_rewardPointsNotAvailable);
+				return false;
+			}
+		}
+	}
+	return true;
+}
+
+function setWFVariablesManageRewardConfigration(){
+	document.getElementById("curPersistenceClass").value="saigun.empxtrack.persistencehelpers.RewardsPersistence";
+	document.getElementById("workflowType").value="RewardsData";
+	document.getElementById("wfAction").value="create-submit";
+}
+
+function closePopUpAndReturnBack(){
+	closeFancyBox();
+}
+
+
+function showCommonNotesGlobalInvocation(empId,extraInfo) {
+	if(extraInfo==null)
+		extraInfo="";
+	ga('send', 'event', { eventCategory: 'CommonNotesHandler', eventAction: 'viewAllRecords', eventLabel: 'viewTeamCommonNotesByEmpId'});
+	adrh.viewAllRecords('CommonNotesHandler',"viewTeamCommonNotesByEmpId",empId,extraInfo,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+		initializeCKEditor();
+	}});
+}
+
+function saveCommonNotes(empId,module){
+	var commonNotes = "";
+	var noteTypeValue = "";
+	var visibleTo = "";
+	if(module == "empCareerPlan"){
+		if(document.getElementById('ckEditor_notes')!=null){
+			commonNotes=CKEDITOR.instances.ckEditor_notes.getData();
+		}
+		noteTypeValue = "1";
+		visibleTo = "3";
+	}else{
+		var noteTypeValue = dwr.util.getValue('noteType');
+		var visibleTo=dwr.util.getValue('visibleTo');
+		if(document.getElementById('ckEditor_notes')!=null){
+			commonNotes=CKEDITOR.instances.ckEditor_notes.getData();
+		}
+		if(noteTypeValue == null || noteTypeValue ==""){
+			jAlert(a_specifyNotesType);
+			return false;
+		}
+	}
+	if(commonNotes==""){
+		jAlert(a_specifyNotes);
+		return false;
+	}
+	var tempTeo = new Object();
+	tempTeo.message=commonNotes;
+	tempTeo.empId=empId;
+	tempTeo.module=module;
+	if(document.getElementById('confidentialId') != null){
+		tempTeo.confidentialId=document.getElementById('confidentialId').value;
+	}
+	if(document.getElementById('_selectedEmpFormId') != null){
+		tempTeo.p8=document.getElementById('_selectedEmpFormId').value;
+	}
+
+	if(document.getElementById('noteId') != null){
+		tempTeo.noteId=document.getElementById('noteId').value;
+	}
+	tempTeo.p7=noteTypeValue;
+	tempTeo.visibleTo=visibleTo;
+	var teoInfoInString = JSON.stringify(tempTeo);
+
+	var fileName = dwr.util.getValue('uploadFile');
+
+	ga('send', 'event', { eventCategory: 'CommonNotesHandler', eventAction: 'executeCall', eventLabel: 'saveTeo'});
+	adrh.executeCall('CommonNotesHandler',teoInfoInString,'saveManagerNotes','','',fileName,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsgOnPopUp", dwrResponse.errorMsg,"failure");
+		}else{
+			closeFancyBox();
+			displayConfirmationMsg("errorMsg", dwrResponse.errorMsg,"failure");
+			
+			if(module == "Appraisal" || module == "GoalSheetHandler" || module == "ManageEmployeeExit"){
+				viewCommonNotesForSelectedConfidentialId(document.getElementById('confidentialId').value,empId,module);
+			}
+		}}
+	});
+}
+
+function viewCommonNotesForSelectedConfidentialId(confidentialId,empId,module){
+	var extraInfo = confidentialId+"#"+empId+"#"+module;
+	ga('send', 'event', { eventCategory: 'CommonNotesHandler', eventAction: 'viewAllRecords', eventLabel: 'viewCommonNotesForSelectedConfidentialId'});
+	adrh.viewAllRecords('CommonNotesHandler','viewCommonNotesForSelectedConfidentialId','',extraInfo,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("displayEmpNotes_"+confidentialId, dwrResponse.response,{ escapeHtml:false });			
+	}});
+}
+
+function deleteSelectedCommonNote(noteId,empId,module){
+	 jConfirm("Are you sure you want to delete the notes?", '', function(r)
+	{
+		r.close();
+		ga('send', 'event', { eventCategory: 'CommonNotesHandler', eventAction: 'executeCall', eventLabel: 'deleteWorkflowNotes'});
+		adrh.executeCall('CommonNotesHandler',noteId,'deleteWorkflowNotes','','', {async:defaultAsyncValue,callback:function(dwrResponse) {
+			if(dwrResponse.error == true){
+				displayConfirmationMsg("errorMsg", dwrResponse.errorMsg,"failure");
+			}else{
+				if(document.getElementById('confidentialId') != null ){
+					viewCommonNotesForSelectedConfidentialId(document.getElementById('confidentialId').value,empId,module);
+				}
+			}
+		}});
+	});
+}
+
+function editSelectedCommonNote(noteId){
+
+	ga('send', 'event', { eventCategory: 'CommonNotesHandler', eventAction: 'executeCall', eventLabel: 'editSelectedCommonNote'});
+	adrh.viewAllRecords('CommonNotesHandler',"editSelectedCommonNote",noteId,'',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+		initializeCKEditor();
+	}});
+
+}
+
+function nominationReqForSubordnate(empId){
+	var empIdChk="-1";
+	if(empId != undefined){		
+		empIdChk = empId;
+	}
+	var selectedTimePeriodId = "-1";	
+	if(document.getElementById("selectedTimePeriod")!=null){		
+		selectedTimePeriodId = document.getElementById("selectedTimePeriod").value;
+	}
+	ga('send', 'event', { eventCategory: 'MyTeamTraining', eventAction: 'encryptJsUrl', eventLabel: 'nominationReqForSubordnate'});
+	var tempUrl ="mod=MyTeamTraining&secondaryVar=extendedDwrMode^getDetailsForSubordinateNomination,cdmtHeaderBar^false,displayLeftPanel^false,nominateOption^selfNominatedTrainingProgramAndCources,selectedTimePeriodId^"+selectedTimePeriodId+",selectedEmpId^"+empIdChk;
+	adrh.executeCall('MyTeamTraining',tempUrl,'encryptJsUrl','','',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		window.open('runet.do?activity=submit&enc='+dwrResponse.responseTeo.dataObject, '_blank');
+    }});
+}
+
+
+function getTrainingNominationDetailForSubordinate(nominateOption,selectedTimePeriodId,empId){
+	ga('send', 'event', { eventCategory: 'MyTraining', eventAction: 'viewRecordForEdit', eventLabel: 'getDetailsForTeamNomination'});
+	adrh.viewRecordForEdit('MyTraining','','getDetailsForTeamNomination',nominateOption,empId, {async:defaultAsyncValue,callback:function(dwrResponse) {
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsg", dwrResponse.errorMsg,"failure");
+		}else{
+			dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+			writeBreadCrumbData();
+		}
+		
+	}});	
+}
+
+function getDetailsForSelfNominationDetails(nominateOption,dwrMode){
+	var selectedTimePeriodId =-1;
+	var extraInfoDetails = "";
+	if(document.getElementById("selectedTimePeriodId") != null){
+		selectedTimePeriodId = document.getElementById("selectedTimePeriodId").value;
+	}
+	if(document.getElementById("courseType") != null){
+		var selectedCourseType = document.getElementById("courseType").value;
+		if(extraInfoDetails.length > 0){
+			extraInfoDetails = extraInfoDetails+"#"+selectedCourseType;
+		}else{
+			extraInfoDetails = selectedCourseType;
+		}
+	}
+	if(document.getElementById("selectedSkillsComp") != null){
+		var selectedSkillsCompIds = "";
+		var selectedSkillsComp =document.getElementsByName('selectedSkillsComp')[0];
+		for (i=0; i < selectedSkillsComp.length; i++ ){
+			selectedSkillsCompIds = selectedSkillsCompIds+selectedSkillsComp[i].value+",";
+		}
+		if(extraInfoDetails.length > 0){
+			extraInfoDetails = extraInfoDetails+"#"+selectedSkillsCompIds;
+		}else{
+			extraInfoDetails = selectedSkillsCompIds;
+		}
+	}
+	if(document.getElementById("searchCriteria") != null){
+		var searchCriteria = document.getElementById("searchCriteria").value;
+		if(extraInfoDetails.length > 0){
+			extraInfoDetails = extraInfoDetails+"#"+searchCriteria;
+		}else{
+			extraInfoDetails = searchCriteria;
+		}
+	}
+	if(document.getElementById("programDisplayModeData") != null){
+		var programDisplayMode = getSelectedRadioValue("programDisplayMode");
+		if(extraInfoDetails.length > 0){
+			extraInfoDetails = extraInfoDetails+"#"+programDisplayMode;
+		}else{
+			extraInfoDetails = programDisplayMode;
+		}
+	}
+	ga('send', 'event', { eventCategory: 'MyTraining', eventAction: 'viewRecordForEdit', eventLabel: dwrMode});
+	adrh.viewRecordForEdit('MyTraining',selectedTimePeriodId,dwrMode,nominateOption,extraInfoDetails, {async:defaultAsyncValue,callback:function(dwrResponse){
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsg", dwrResponse.errorMsg,"failure");	
+			
+		}else{
+			dwr.util.setValue("selfNominationDetails", dwrResponse.response,{ escapeHtml:false });
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+			
+			initToggleCom();
+		}
+	}});
+}
+
+function getWorkflowDetailForTrainingNomination(dwrMode){
+	var courseId=-1;
+	var selectedPrgmId=-1;
+	var requestType ="selfNominatedCourseType";
+	var tngNominateOption = document.getElementsByName("nominateOption");
+	if(tngNominateOption !=null){
+		for (var i = 0; i < tngNominateOption.length; i++) {
+		  if (tngNominateOption[i].checked) {
+			 requestType = tngNominateOption[i].value;
+		  }
+		}
+	}
+	if(requestType == "selfNominatedCourseType"){
+		var tngCourseBox = document.getElementsByName("courseNames");
+		if(tngCourseBox !=null){
+			for (var i = 0; i < tngCourseBox.length; i++) {
+			  if (tngCourseBox[i].checked) {
+				 courseId = tngCourseBox[i].value;
+			  }
+			}
+		}
+		if(courseId == -1){
+			jAlert(a_tnd_myTng_selectCourse);
+			return false;
+		}
+	}else if(requestType == "selfNominatedTrainingProgramType"){
+		var tngCourseBox = document.getElementsByName("programNames");
+		if(tngCourseBox !=null){
+			for (var i = 0; i < tngCourseBox.length; i++) {
+			  if (tngCourseBox[i].checked) {
+  				 selectedPrgmId	= tngCourseBox[i].value;
+				 courseId = document.getElementById("courseId_"+selectedPrgmId).value;
+			  }
+			}
+		}
+		if(selectedPrgmId == -1){
+			jAlert(a_tnd_myTng_selectProgram);
+			return false;
+		}
+	}
+	var selectedTimePeriodId =-1;
+	if(document.getElementById("selectedTimePeriodId")!=null){
+		selectedTimePeriodId = document.getElementById("selectedTimePeriodId").value;
+	}
+	var requestState=document.getElementById("requestInitialState").value;
+	var selectedEmpId =-1;
+	if(document.getElementById("selectedEmpId")!=null){
+		selectedEmpId=document.getElementById("selectedEmpId").value;
+	}
+	var extraInfo = requestState+"#"+courseId+"#"+selectedPrgmId+"#"+selectedTimePeriodId+"#"+requestType+"#"+dwrMode+"#"+selectedEmpId;
+	ga('send', 'event', { eventCategory: 'MyTraining', eventAction: 'viewRecordForEdit', eventLabel: dwrMode});
+	adrh.viewRecordForEdit('MyTraining',requestType,'getWorkflowDetailForTrainingNomination',courseId,extraInfo, {async:defaultAsyncValue,callback:function(dwrResponse){
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsg", dwrResponse.errorMsg,"failure");			
+		}else{
+			dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+			writeBreadCrumbData();
+		}
+		
+	}});
+}
+
+function displayAttributeLinkagesInDialog(attributeId, mode){
+	ga('send', 'event', { eventCategory: 'JobDescriptionHandler', eventAction: 'viewRecordForEdit', eventLabel: 'qulificationType'});
+	adrh.viewAllRecords('JobDescriptionHandler','displayAttributeLinkages', attributeId, mode, {async:defaultAsyncValue,callback:function(dwrResponse){
+			showFancyBox(dwrResponse.response);
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+		}});
+}
+
+
+function displayEmpSkillEndorsement(empId,attributeId){
+	ga('send', 'event', { eventCategory: 'EmployeeSkillSheetHandler', eventAction: 'displayEmpSkillEndorsement', eventLabel: 'displayEmpSkillEndorsement'});
+	adrh.viewAllRecords('EmployeeSkillSheetHandler', 'employeeSkillEndorsementDetails', empId, attributeId,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+    }});
+}
+
+
+function removeEndorsement(empId,attributeId){
+	ga('send', 'event', { eventCategory: 'EmployeeSkillSheetHandler', eventAction: 'executeCall', eventLabel: 'removeEmpSkillEndorsement'});
+	var msg = 'Are you sure you want to remove the endorsement?';
+	jConfirm(msg, '', function(r)
+	{
+		r.close();
+		adrh.executeCall('EmployeeSkillSheetHandler', empId,'removeEmpSkillEndorsement','',attributeId,{async:defaultAsyncValue,callback:function(dwrResponse){
+			closeFancyBox();
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+
+			adrh.viewRecordForEdit('EmployeeSkillSheetHandler',empId,'employeeSkillSheetDetails','', '', {async:defaultAsyncValue,callback:function(dwrResponse) {
+				dwr.util.setValue("employeeSkillSheetDetails", dwrResponse.response,{ escapeHtml:false });
+			}});
+		}});
+	});
+
+}
+
+function endorseEmpSkill(empId,attributeId) {
+	var empSkillEndorsementTeo= new Object();
+	empSkillEndorsementTeo.empId=empId;
+	empSkillEndorsementTeo.attributeId=attributeId;
+	//empSkillEndorsementTeo.note=document.getElementById("_endorse_note").value;
+	var teoInfoInString = JSON.stringify(empSkillEndorsementTeo);
+	adrh.executeCall('EmployeeSkillSheetHandler', teoInfoInString,'endorseEmpSkill','','',{async:defaultAsyncValue,callback:function(dwrResponse){
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsgOnPopUpSkillEndorsement", dwrResponse.errorMsg,"failure");
+			
+		}else{
+			//closeFancyBox();
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+			adrh.viewRecordForEdit('EmployeeSkillSheetHandler',empId,'employeeSkillSheetDetails','', '', {async:defaultAsyncValue,callback:function(dwrResponse) {
+				dwr.util.setValue("employeeSkillSheetDetails", dwrResponse.response,{ escapeHtml:false });
+			}});
+		}
+	}});
+}
+function lazyload() {
+	$('.lazy').lazy({
+		scrollDirection: 'vertical',
+		effect : "fadeIn",
+		visibleOnly: true,
+		threshold: 0
+	});
+}
+
+
+function displayConfirmationMsg(msgDiv,msgText,type) {
+	/*if(msgText != null && msgText.length > 0){
+		var stripedHtml = $("<div>").html(msgText).text();
+			BootstrapDialog.show({
+				title: 'Confirmation message',
+				message: stripedHtml,
+				draggable: true,
+				buttons: [{
+				label: 'Ok',
+				action: function(dialog) {
+					dialog.close();
+				}
+				}]
+			});
+	}*/
+	// Comment out the below mention line of code to display error msg in leagacy style
+	if(msgText != null && msgText.length > 0){
+		dwr.util.setValue(msgDiv, msgText,{ escapeHtml:false });
+		closableNotificationMsg(msgDiv);
+	}
+}
+
+
+
+function viewSelectedSubordinateGoalSheet(selectedGoalSheetId,userType){
+	dwr.util.useLoadingMessage();	
+	adrh.executeCall('ClientRequestHandler',"dFilter_goalsheetId",'setDataFilterSelectionOnSession',selectedGoalSheetId,'',{async:false,callback:function(dwrResponse) {
+		window.location.href = "runet.do?activity=submit&mod=contribute&selMenuItemChoice=contribute&currentUserRole="+userType;
+	}});
+}
+
+
+function downloadDocument(documentId,processName){
+	if (typeof processName === 'undefined' || processName === null){
+		processName = 'empdocuments';
+	}
+	ga('send', 'event', { eventCategory: 'EmpDocumentDetail', eventAction: 'downloadRecordById', eventLabel: processName});
+	adrh.executeCall('EmpDocumentDetail',documentId,"downloadRecordById" ,'',processName,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.engine.openInDownload(dwrResponse.responseTeo.dataObject);
+	}});
+}

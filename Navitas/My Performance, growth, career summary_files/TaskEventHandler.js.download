@@ -1,0 +1,1244 @@
+function enableDisableTimeDurationBox(elem){
+	if(elem.checked){
+		document.getElementById("startTime").disabled=true;
+		document.getElementById("duration").disabled=true;
+		document.getElementById("timeZone").disabled=true;
+	}else{
+		document.getElementById("startTime").disabled=false;
+		document.getElementById("duration").disabled=false;
+		document.getElementById("timeZone").disabled=false;
+	}
+}
+
+function getAllPendingTaskAndUpcomingEvent(selectedDate) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'calendarViewOfEvent'});
+	adrh.viewAllRecords('TaskEventHandler','calendarViewOfEvent','calledFromMessageCenter','self',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("getAllPendingTaskAndUpcomingEvent", dwrResponse.response,{ escapeHtml:false });
+		if(document.getElementById("eventCalendar") != null){
+			eval(document.getElementById("initEventCalendar").innerHTML);
+			drawEventCalendar();
+		}
+	}});
+}
+
+function getAllPendingAndUpcomingTask(selectedDate){
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'getAllTaskAndEvent'});
+	adrh.viewAllRecords('TaskEventHandler','getAllPendingTaskAndUpcomingEvent',selectedDate,'',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("getAllPendingAndUpcomingTask", dwrResponse.response,{ escapeHtml:false });
+	}});
+}
+
+function getAllCompletedTasksForEmployee(selectedDate) {
+
+	if(document.getElementById("getCompletedTask").checked){
+		ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'getAllCompletedTasksForEmployee'});
+		adrh.viewAllRecords('TaskEventHandler','getAllCompletedTasksForEmployee','','',{async:defaultAsyncValue,callback:function(dwrResponse) {
+			dwr.util.setValue("getAllCompletedTasksForEmployee", dwrResponse.response,{ escapeHtml:false });
+		}});
+	}else{
+		getAllPendingAndUpcomingTask(selectedDate);
+	}
+}
+
+function showAjaxSearchForOtherEmpSelection(selectedDate) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'showAjaxSearchForOtherEmpSelection'});
+	adrh.viewAllRecords('TaskEventHandler','showAjaxSearchForOtherEmpSelection',selectedDate,'', {async:defaultAsyncValue, callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+	}});
+}
+
+function viewAnotherCalendar(selectedDate) {
+	var empId = document.getElementById("empSearchName_hidden").value;
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'getAllTaskAndEvent'});
+	adrh.viewAllRecords('TaskEventHandler','getAllPendingTaskAndUpcomingEventForOthers',selectedDate,empId,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+	}});
+}
+
+function getAllCompletedTasksForOthers(selectedDate) {
+	var empId = document.getElementById("selectedEmpId").value;
+	if(document.getElementById("getCompletedTask").checked){
+		ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'getAllCompletedTasksForEmployee'});
+		adrh.viewAllRecords('TaskEventHandler','getAllCompletedTasksForOthers','',empId,{async:defaultAsyncValue,callback:function(dwrResponse) {
+			dwr.util.setValue("showTaskDetails", dwrResponse.response,{ escapeHtml:false });
+		}});
+	}else{
+		viewSelectedEmpCalendar(selectedDate,empId);
+	}
+}
+
+function viewSelectedEmpCalendar(selectedDate,empId) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'getAllTaskAndEvent'});
+	adrh.viewAllRecords('TaskEventHandler','getAllPendingTaskAndUpcomingEventForOthers',selectedDate,empId,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+	}});
+}
+
+function showSelectedStep(elem,selectedStep,stepToHide1,) {
+	document.getElementById(selectedStep).style.display='';
+	document.getElementById(stepToHide1).style.display='none';
+	selectCheckbox("eventStep");
+}
+
+
+function editOptionForRecurringEvent(type,selectedDate,taskEventMasterId) {
+	var  extraInfo  = type+"#"+selectedDate+"#"+taskEventMasterId;
+	adrh.viewAllRecords('TaskEventHandler','editOptionForRecurringEvent','',extraInfo,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+	}});
+}
+
+function updateTaskEventForRecurringEvent() {
+	var  type = document.getElementById("type").value;
+	var  selectedDate = document.getElementById("selectedDate").value;
+	var  taskEventMasterId = document.getElementById("taskEventMasterId").value;
+	var  extraInfo = dwr.util.getValue("recurringEventUpdateOpt");
+	addNewTaskEvent(type,selectedDate,taskEventMasterId,extraInfo);
+}
+
+function addNewTaskEvent(type,selectedDate,taskEventMasterId,extraInfo) {
+	var currSelectedDate = '';
+	var extraInfoDetails = '';
+	var currSelectedTime = '';
+	if(selectedDate.indexOf("T") > 0){
+		var selectedDateTimeArr = selectedDate.split("T");
+		currSelectedDate = selectedDateTimeArr[0];
+		currSelectedTime = selectedDateTimeArr[1];
+		extraInfoDetails = currSelectedDate+"#"+taskEventMasterId+"#"+currSelectedTime;
+	}else{
+		extraInfoDetails = selectedDate+"#"+taskEventMasterId;
+	}
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'addNewTaskEvent'});
+	adrh.viewAllRecords('TaskEventHandler','addNewTaskEvent',type,extraInfoDetails,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+		initializeCalendar();
+		initializeCKEditor();
+		document.getElementById("update_mode").value = extraInfo;
+		if(taskEventMasterId > 0){
+			if(extraInfo == 'updateMeOnly'){
+				$('.frequency').prop('disabled', true);
+				$('.frequencyValue').prop('disabled', true);
+			}
+		}
+		$('.timeInput').timepicker({showPeriodLabels:false});
+	}});
+}
+
+function saveTaskEventEntry(copyTaskEvent) {
+	var loginEmpId=document.getElementById("loginEmpId").value;
+	var taskEventMasterTeo= new Object();
+	if( copyTaskEvent == 'copyTaskEvent'){
+		taskEventMasterTeo.taskEventMasterId=-1;
+	}else{
+		taskEventMasterTeo.taskEventMasterId=document.getElementById("taskEventMasterId").value;
+	}
+	taskEventMasterTeo.type=document.getElementById("type").value;
+	taskEventMasterTeo.subject=document.getElementById("subject").value;
+	taskEventMasterTeo.category=document.getElementById("category").value;
+	taskEventMasterTeo.calendarType=document.getElementById("calendarType").value;
+	taskEventMasterTeo.reminderMin=document.getElementById("reminderMin").value;
+	if(document.getElementById('ckEditor_description')!=null){
+		taskEventMasterTeo.description=CKEDITOR.instances.ckEditor_description.getData();
+	}
+	if(document.getElementById('location')!=null){
+		taskEventMasterTeo.location=document.getElementById("location").value;
+	}
+	var startTime ="00:00";
+	var endTime ="23:59";
+	if(document.getElementById("startTime") != null && document.getElementById("startTime").value != ""){
+		startTime = document.getElementById("startTime").value;
+	}
+	if(document.getElementById("endTime") != null &&  document.getElementById("endTime").value != ""){
+		endTime = document.getElementById("endTime").value;
+	}
+
+	if(document.getElementById("sendNotification") != null && document.getElementById("sendNotification").checked){
+		taskEventMasterTeo.sendNotification="yes";
+	}else{
+		taskEventMasterTeo.sendNotification="no";
+	}
+	taskEventMasterTeo.allDay=1;
+	if(document.getElementById("allDayEventMode") != null){
+		if(document.getElementById("allDayEventMode").checked){
+			taskEventMasterTeo.allDay=1;
+			taskEventMasterTeo.duration=endTime;
+		}else{
+			taskEventMasterTeo.allDay=0;
+			if(document.getElementById("duration") != null){
+				if(document.getElementById("duration").value == "-1"){
+					jAlert("Please specify the duration.");
+					return false;
+				}else{
+					taskEventMasterTeo.duration=document.getElementById("duration").value;
+				}
+
+			}
+		}
+	}
+
+
+	if(document.getElementById("type").value == "1"){
+		if(document.getElementById("selectedEndDate") != null &&  document.getElementById("selectedEndDate").value != ""){
+			taskEventMasterTeo.calendarDateStart=document.getElementById("selectedEndDate").value;
+			taskEventMasterTeo.calendarDateEnd=document.getElementById("selectedEndDate").value;
+		}else{
+			jAlert("Please specify the due on date");
+			return false;
+		}
+	}else{
+		if(document.getElementById("selectedStartDate") != null &&  document.getElementById("selectedStartDate").value != ""){
+			taskEventMasterTeo.calendarDateStart=document.getElementById("selectedStartDate").value;
+		}
+		if(document.getElementById("selectedEndDate") != null &&  document.getElementById("selectedEndDate").value != ""){
+			taskEventMasterTeo.calendarDateEnd=document.getElementById("selectedEndDate").value;
+		}
+	}
+
+
+	taskEventMasterTeo.startTime=startTime;
+	taskEventMasterTeo.endTime=endTime;
+	var attendees = "-1";
+	if(document.getElementById("type").value == "1"){
+		if(document.getElementById("addTaskToOthers").checked){
+			var selectedEmpIds = document.getElementById('assignedAttendeesList');
+			if (selectedEmpIds.length > 0) {
+				for(i = 0; i<selectedEmpIds.length ; i++) {
+					attendees = attendees +  ( attendees == "" ? selectedEmpIds.options[i].value : ","+ selectedEmpIds.options[i].value);
+				}
+			}
+			if(document.getElementById("addTaskToMe").checked == false){
+				attendees = attendees +","+loginEmpId;
+			}
+		}else{
+			attendees = loginEmpId; // Self task assignment
+		}
+	}else{
+		var isPrivate = 0;
+		if(document.getElementById("isPrivateEvent").checked){
+			isPrivate = 1;
+		}
+		taskEventMasterTeo.isPrivate = isPrivate;
+
+		var isRecurring = 0;
+		if(document.getElementById("isRecurring").checked){
+			isRecurring = 1;
+			var excludeWeekends = "false";
+			var recurringCount = 2;
+			var frequency = dwr.util.getValue("frequency");
+			if(frequency == 'DAILY'){
+				recurringCount = document.getElementById("repetitionDaily").value;
+				if(document.getElementById("excludeWeekends").checked){
+					excludeWeekends = 'true';
+				}
+			}else if(frequency == 'WEEKLY'){
+				recurringCount = document.getElementById("repetitionWeekly").value;
+			}else{
+				recurringCount = document.getElementById("repetitionMonthly").value;
+			}
+			if(recurringCount == "-1"){
+				jAlert("Please specify the recurring count");
+				return false;
+			}
+			taskEventMasterTeo.recurringCount = recurringCount;
+
+			var recurringRules = "FREQ="+frequency+";INTERVAL=1;COUNT="+recurringCount;
+			taskEventMasterTeo.recurringRules = recurringRules;
+			taskEventMasterTeo.excludeWeekends = excludeWeekends;
+		}
+		taskEventMasterTeo.recurring = isRecurring;
+
+		var selectedEmpIds = document.getElementById('assignedAttendeesList');
+		if (selectedEmpIds.length > 0) {
+			for(i = 0; i<selectedEmpIds.length ; i++) {
+				attendees = attendees +  ( attendees == "" ? selectedEmpIds.options[i].value : ","+ selectedEmpIds.options[i].value);
+			}
+		}
+		if(document.getElementById("addEventToMe").checked){
+			attendees = attendees +","+loginEmpId;
+		}
+		attendees = attendees +"#"+document.getElementById("non-employees-emails").value;
+	}
+	if(document.getElementById("timeZone") != null){
+		if(document.getElementById("timeZone").value != "-1"){
+			taskEventMasterTeo.timeZone=document.getElementById("timeZone").value;
+		}
+	}
+	taskEventMasterTeo.attendees=attendees;
+	var teoInfoInString = JSON.stringify(taskEventMasterTeo);
+	var update_mode = document.getElementById("update_mode").value;
+	adrh.executeCall('TaskEventHandler', teoInfoInString,'saveTaskEventEntry','',update_mode,{async:defaultAsyncValue,callback:function(dwrResponse){
+		if(dwrResponse.error == true){
+			if(document.getElementById('errorMsgForEventTask') != null){
+				displayConfirmationMsg("errorMsgForEventTask", dwrResponse.errorMsg,"failure");
+				
+			}else{				
+				displayConfirmationMsg("errorMsgOnPopUpSkill", dwrResponse.errorMsg,"failure");
+				
+			}
+		}else{
+			closeFancyBox();
+			if(document.getElementById('eventCalendar') != null){
+				displayConfirmationMsg("errorMsgForEventTask", dwrResponse.notificationMsg,"success");
+				
+				var selectedDate = document.getElementById("selectedDate").value;
+				if(document.getElementById("getAllPendingTaskAndUpcomingEvent") != null /*&& document.getElementById("getAllPendingAndUpcomingTask") != null*/){
+					getAllPendingTaskAndUpcomingEvent(selectedDate);
+					/*getAllPendingAndUpcomingTask(selectedDate);*/
+				}else{
+					if(document.getElementById("eventCalendar") != null){
+						var calendarViewBy = document.getElementById("calendarViewBy").value;
+						calendarViewOfEvent(selectedDate,calendarViewBy);
+					}
+				}
+			}else{
+				if(document.getElementById('eventCalendarSearch') != null){
+					var filterInfo = document.getElementById('eventCalendarSearch').value;
+					var _searchPharse = document.getElementById('_searchPharse').value;
+					ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'getAllTaskAndEvent'});
+					adrh.viewAllRecords('TaskEventHandler','displayDataOnsearchEventAndTask',filterInfo,_searchPharse,{async:defaultAsyncValue,callback:function(dwrSearchResponse) {
+						dwr.util.setValue("displayPageContent", dwrSearchResponse.response,{ escapeHtml:false });
+						displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+						
+					}});
+				}else{
+					displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+					
+				}
+				
+			}
+		}
+	}});
+}
+
+function markedTaskCompleted(taskEventId,elem) {
+	var statusValue ="0";
+	if(elem.checked == true){
+		statusValue ="1";
+	}
+	updateTaskEventStatus(taskEventId,statusValue,"task");
+}
+
+function updateTaskEventStatus(taskEventId,statusValue,type) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'executeCall', eventLabel: 'updateTaskEventStatus'});
+	adrh.executeCall('TaskEventHandler', taskEventId,'updateTaskEventStatus',statusValue,type,{async:defaultAsyncValue,callback:function(dwrResponse){
+		closeFancyBox();
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsgForEventTask", dwrResponse.errorMsg,"failure");
+		}else{
+			displayConfirmationMsg("errorMsgForEventTask", dwrResponse.notificationMsg,"success");
+			var selectedDate = document.getElementById("selectedDate").value;
+			if(document.getElementById("getAllPendingTaskAndUpcomingEvent") != null /*&& document.getElementById("getAllPendingAndUpcomingTask") != null*/){
+				getAllPendingTaskAndUpcomingEvent(selectedDate);
+				/*getAllPendingAndUpcomingTask(selectedDate);*/
+			}else{
+				if(document.getElementById("eventCalendar") != null){
+					var calendarViewBy = document.getElementById("calendarViewBy").value;
+					calendarViewOfEvent(selectedDate,calendarViewBy);
+				}
+			}
+		}
+		if(document.getElementById("messageId") != null && document.getElementById("messageId").value != "-1"){
+			var messageId = document.getElementById("messageId").value;
+			if(document.getElementById("message_selectedFilter") != null){
+				adrh.viewRecordForEdit('MessageHandler',messageId, 'archive', '', '', {async:defaultAsyncValue,callback:function(dwrResponse){
+					var messageFilter= document.getElementById("message_selectedFilter").value;
+					fillMessages(messageFilter);
+					getUnreadMessageCount();
+				}});
+			}
+		}
+
+		
+	}});
+}
+
+function deleteOptionForRecurringEvent(taskEventId) {
+	if(document.getElementById("messageId") != null && document.getElementById("messageId").value != "-1"){
+		deleteTaskEventByTaskEventId(taskEventId,"deleteAllOccurences");
+	}else{
+		adrh.viewAllRecords('TaskEventHandler','deleteOptionForRecurringEvent',taskEventId,'',{async:defaultAsyncValue,callback:function(dwrResponse) {
+			showFancyBox(dwrResponse.response);
+		}});
+	}
+}
+
+function deleteTaskEventForRecurringEvent() {
+	var  taskEventId = document.getElementById("taskEventId").value;
+	var  extraInfo = dwr.util.getValue("recurringEventDelOpt");
+	deleteTaskEventByTaskEventId(taskEventId,extraInfo);
+}
+
+function deleteTaskEventByTaskEventId(taskEventId,extraInfo) {
+
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'executeCall', eventLabel: 'deleteTaskEventByTaskEventId'});
+
+	var msg = 'Are you sure you want to delete the event/task?';
+	jConfirm(msg, '', function(r)
+	{
+		r.close();
+		adrh.executeCall('TaskEventHandler', taskEventId,'deleteTaskEventByTaskEventId','',extraInfo,{async:defaultAsyncValue,callback:function(dwrResponse){
+			closeFancyBox();
+			if(dwrResponse.error == true){
+				displayConfirmationMsg("errorMsgForEventTask", dwrResponse.errorMsg,"failure");
+			}else{
+				displayConfirmationMsg("errorMsgForEventTask", dwrResponse.notificationMsg,"success");
+				var selectedDate = document.getElementById("selectedDate").value;
+				if(document.getElementById("getAllPendingTaskAndUpcomingEvent") != null /*&& document.getElementById("getAllPendingAndUpcomingTask") != null*/){
+					getAllPendingTaskAndUpcomingEvent(selectedDate);
+					/*getAllPendingAndUpcomingTask(selectedDate);*/
+				}else{
+					if(document.getElementById("eventCalendar") != null){
+						var calendarViewBy = document.getElementById("calendarViewBy").value;
+						calendarViewOfEvent(selectedDate,calendarViewBy);
+					}
+				}
+			}
+			if(document.getElementById("messageId") != null && document.getElementById("messageId").value != "-1"){
+				var messageId = document.getElementById("messageId").value;
+				if(document.getElementById("message_selectedFilter") != null){
+					adrh.viewRecordForEdit('MessageHandler',messageId, 'archive', '', '', {async:defaultAsyncValue,callback:function(dwrResponse){
+						var messageFilter= document.getElementById("message_selectedFilter").value;
+						fillMessages(messageFilter);
+						getUnreadMessageCount();
+					}});
+				}
+			}
+			
+		}});
+	});
+
+}
+
+function deleteTaskEventByTaskEventMasterId(taskEventMasterId) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'executeCall', eventLabel: 'deleteTaskEventByTaskEventId'});
+	var msg = 'Are you sure you want to delete the event/task.All the linked events/tasks deleted as well?';
+	jConfirm(msg, '', function(r)
+	{
+		r.close();
+		var update_mode = document.getElementById("update_mode").value;
+		adrh.executeCall('TaskEventHandler', taskEventMasterId,'deleteTaskEventByTaskEventMasterId','',update_mode,{async:defaultAsyncValue,callback:function(dwrResponse){
+			closeFancyBox();
+			if(dwrResponse.error == true){
+				displayConfirmationMsg("errorMsgForEventTask", dwrResponse.errorMsg,"failure");
+			}else{
+				displayConfirmationMsg("errorMsgForEventTask", dwrResponse.notificationMsg,"success");
+				var selectedDate = document.getElementById("selectedDate").value;
+				if(document.getElementById("getAllPendingTaskAndUpcomingEvent") != null /*&& document.getElementById("getAllPendingAndUpcomingTask") != null*/){
+					getAllPendingTaskAndUpcomingEvent(selectedDate);
+					/*getAllPendingAndUpcomingTask(selectedDate);*/
+				}else{
+					if(document.getElementById("eventCalendar") != null){
+						var calendarViewBy = document.getElementById("calendarViewBy").value;
+						calendarViewOfEvent(selectedDate,calendarViewBy);
+					}
+				}
+			}
+			
+		}});
+	});
+
+}
+
+function viewEventRequest(taskEventId,messageId) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'viewEventRequest'});
+	adrh.viewAllRecords('TaskEventHandler','viewEventRequest',taskEventId,messageId,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+	}});
+}
+
+function viewEventRequestByOrganiser(taskEventId) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'viewEventRequest'});
+	adrh.viewAllRecords('TaskEventHandler','viewEventRequestByOrganiser',taskEventId,"-1",{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+	}});
+}
+
+function disableStartEnd(elem) {
+	if(elem.checked == true){
+		document.getElementById("startTime").disabled = true;
+		document.getElementById("endTime").disabled = true;
+	}else{
+		document.getElementById("startTime").disabled = false;
+		document.getElementById("endTime").disabled = false;
+	}
+}
+
+function disableAttendess(elem) {
+	if(elem.checked == true){
+		document.getElementById("Attendees").style.display = "";
+	}else{
+		document.getElementById("Attendees").style.display =  "none";
+	}
+}
+
+function calendarViewOfEventWithoutEmployee(selectedDate, viewMode){
+	var viewMode = viewMode+"#-1";
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'getAllTaskAndEvent'});
+	adrh.viewAllRecords('TaskEventHandler','calendarViewOfEvent',selectedDate,viewMode,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+		if(document.getElementById("eventCalendar") != null){
+			eval(document.getElementById("initEventCalendar").innerHTML);
+			drawEventCalendar();
+			writeBreadCrumbData();
+		}
+	}});
+}
+
+function calendarViewOfEvent(selectedDate, viewMode){
+	var empIds = "";
+	if(viewMode == 'specificEmp'){
+		if(document.getElementById("assignedEmpList") != null){
+			var selectedEmpIds = document.getElementById('assignedEmpList');
+			if (selectedEmpIds.length > 0) {
+				for(i = 0; i<selectedEmpIds.length ; i++) {
+					empIds = empIds +  ( empIds == "" ? selectedEmpIds.options[i].value : ","+ selectedEmpIds.options[i].value);
+				}
+			}
+		}
+		viewMode = viewMode+"#"+empIds;
+	}
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'getAllTaskAndEvent'});
+	adrh.viewAllRecords('TaskEventHandler','calendarViewOfEvent',selectedDate,viewMode,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+		if(document.getElementById("eventCalendar") != null){
+			eval(document.getElementById("initEventCalendar").innerHTML);
+			drawEventCalendar();
+			writeBreadCrumbData();
+		}
+	}});
+}
+
+function viewEventDetailOfSubordinate(taskEventId) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'viewEventRequest'});
+	adrh.viewAllRecords('TaskEventHandler','viewEventRequest',taskEventId,'viewEventDetailOfSubordinate',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+	}});
+
+}
+
+function toggleSpecificEmpSection() {
+	$("#specificEmpSection").show("slow");
+	document.getElementsByClassName("section-header")[0].innerHTML = l_calendar_viewMode_specificEmp_helpSection;
+	if(document.getElementById("subordinatesFilter") != null){
+		$("#subordinatesFilter").hide("slow");
+	}
+}
+var isColorCodeNeedTobeUpdated = false;
+function getUniqueColorForEvents(eventColorContainer,uniqueId) {
+	if(eventColorContainer.length > 0){
+	  for(var i=0; i<eventColorContainer.length; i++){
+		  var curColor = eventColorContainer[i];
+		  if(curColor.key == uniqueId){
+			  return curColor.value;
+		  }
+	  }
+	}
+	isColorCodeNeedTobeUpdated = true;
+	var letters = ['3566ca','990697','fe980e','db3913','47a647','3c23a9','861212','06714a','4f6902','8d5100','461400','001746','412701','5a0000','002401','1e0026','10240a','7b2424','362336'];
+	var color = '#';
+	color += letters[eventColorContainer.length % 19];
+	var curColor = new Object();
+	curColor.key = uniqueId;
+	curColor.value = color;
+	eventColorContainer.push(curColor);
+	return color;
+}
+
+function setUniqueColorForEventsOnsession() {
+	if(isColorCodeNeedTobeUpdated){
+		var strObj = JSON.stringify(eventColorContainer);
+		ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'viewEventRequestForOthers'});
+		adrh.executeCall('TaskEventHandler',strObj,'setUniqueColorForEventsOnsession','','', {async:false,callback:function(dwrResponse) {
+		}});
+	}
+}
+
+
+function viewEventRequestForOthers(taskEventId) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'viewEventRequestForOthers'});
+	adrh.viewAllRecords('TaskEventHandler','viewEventRequestForOthers',taskEventId,'',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+	}});
+}
+
+
+function invokeSearchForAttendee(){
+	popupBlockerChecker.check(window.open("", "EmpXtrackSearchWindow", features));
+	document.empCommonSearchWizardForm.target ="EmpXtrackSearchWindow";
+	document.empCommonSearchWizardForm.parentFormName.value = "ExecuteTemplateForm";
+	document.empCommonSearchWizardForm.listName.value = "assignedAttendeesList";
+	document.empCommonSearchWizardForm.searchName.value = "search";
+	document.empCommonSearchWizardForm.userType.value = "admin";
+	document.empCommonSearchWizardForm.multiSelection.value = "true";
+	document.empCommonSearchWizardForm.submit();
+}
+
+function addSelectedAttendee(selectedEmployees){
+	var frm =findCurrentForm();
+	var selectedEmps;
+	selectedEmps = getAttendees(selectedEmployees,"select-multiple");
+	var searchName = document.getElementById('attendeeKey').value;
+	if(!isNaN(searchName)){
+		document.getElementById('attendeeKey').value = "";
+		return false;
+	}
+	var searchEmpId= document.getElementById('attendeeName_hidden').value;
+	var newOption 	= document.createElement("OPTION");
+	if(searchName != "" && searchEmpId != ""){
+		newOption.text  = searchName;
+		newOption.value = searchEmpId;
+		if(searchEmpId=="-1"){
+			jAlert(a_empsearch_enterValidEmploye);
+			return false;
+		}
+		if(alreadyAttendeeAdded(selectedEmps,searchEmpId)){
+			selectedEmps.options.add(newOption,selectedEmps.length);
+		}
+	}
+	document.getElementById('attendeeKey').value = "";
+}
+
+function addSelectedEmployee(selectedEmployees){
+	var frm =findCurrentForm();
+	var selectedEmps;
+	selectedEmps = getAttendees(selectedEmployees,"select-multiple");
+	var searchName = document.getElementById('empKey').value;
+	if(!isNaN(searchName)){
+		document.getElementById('empKey').value = "";
+		return false;
+	}
+	var searchEmpId= document.getElementById('attendeeName_hidden').value;
+	var newOption 	= document.createElement("OPTION");
+	if(searchName != "" && searchEmpId != ""){
+		newOption.text  = searchName;
+		newOption.value = searchEmpId;
+		if(searchEmpId=="-1"){
+			jAlert(a_empsearch_enterValidEmploye);
+			return false;
+		}
+		if(alreadyAttendeeAdded(selectedEmps,searchEmpId)){
+			selectedEmps.options.add(newOption,selectedEmps.length);
+		}
+	}
+	document.getElementById('empKey').value = "";
+}
+
+function removeEmployeeFromList() {
+	var frm =findCurrentForm();
+	if(frm.assignedEmpList.length == 0) {
+		jAlert(a_empsearch_noValuesToRemove);
+	}else {
+		var selected = frm.assignedEmpList.selectedIndex;
+		if (selected == -1) {
+			jAlert(a_empsearch_selectAtleastOneEmp);
+			return false;
+		}
+		for(i = 0; i < frm.assignedEmpList.length ; i++){
+			if(frm.assignedEmpList.options[i].selected){
+				frm.assignedEmpList.options[i]=null;
+				i--;
+			}
+		}
+	}
+   return false;
+}
+
+function getAttendees(source,elementType){
+	return document.getElementById(source);
+	/*for (i = 0; i < document.ExecuteTemplateForm.elements.length; i++){
+		elem = document.ExecuteTemplateForm.elements[i];
+		if(elem.type == elementType && elem.name.indexOf(source) != -1)  {
+			return elem;
+		}
+	}*/
+}
+
+function alreadyAttendeeAdded(selectedEmps,selectedEmpId){
+	for(var i=0; i<selectedEmps.length; i++){
+		if(selectedEmpId == "" || selectedEmpId == selectedEmps[i].value)
+			return false;
+	}
+	return true;
+}
+
+function removeAttendeeFromList() {
+	var frm =findCurrentForm();
+	if(frm.assignedAttendeesList.length == 0) {
+		jAlert(a_empsearch_noValuesToRemove);
+	}else {
+		var selected = frm.assignedAttendeesList.selectedIndex;
+		if (selected == -1) {
+			jAlert(a_empsearch_selectAtleastOneEmp);
+			return false;
+		}
+		for(i = 0; i < frm.assignedAttendeesList.length ; i++){
+			if(frm.assignedAttendeesList.options[i].selected){
+				frm.assignedAttendeesList.options[i]=null;
+				i--;
+			}
+		}
+	}
+   return false;
+}
+
+var currentForm = null;
+function findCurrentForm(){
+	if(currentForm == null) {
+		currentForm = document.ExecuteTemplateForm;
+	}
+	return currentForm;
+}
+
+function markedTaskCompletedByTaskEventMasterId(taskEventMasterId,status) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'executeCall', eventLabel: 'updateTaskEventStatus'});
+	adrh.executeCall('TaskEventHandler',taskEventMasterId,'updateTaskEventStatusByTaskEventMasterId',status,'task',{async:defaultAsyncValue,callback:function(dwrResponse){
+		closeFancyBox();
+		if(dwrResponse.error == true){
+			displayConfirmationMsg("errorMsgForEventTask", dwrResponse.errorMsg,"failure");
+		}else{
+			displayConfirmationMsg("errorMsgForEventTask", dwrResponse.notificationMsg,"success");
+			var selectedDate = document.getElementById("selectedDate").value;
+			if(document.getElementById("getAllPendingTaskAndUpcomingEvent") != null /*&& document.getElementById("getAllPendingAndUpcomingTask") != null*/){
+				getAllPendingTaskAndUpcomingEvent(selectedDate);
+				/*getAllPendingAndUpcomingTask(selectedDate);*/
+			}else{
+				if(document.getElementById("eventCalendar") != null){
+					var calendarViewBy = document.getElementById("calendarViewBy").value;
+					calendarViewOfEvent(selectedDate,calendarViewBy);
+				}
+			}
+		}
+		
+	}});
+}
+
+function showHideSelectionOfRepetition(){
+	var selectedFrequency = dwr.util.getValue("frequency");
+	if(selectedFrequency == 'DAILY'){
+		document.getElementById("repetitionDailySection").style.display='';
+		document.getElementById("repetitionWeeklySection").style.display='none';
+		document.getElementById("repetitionMonthlySection").style.display='none';
+	}else if(selectedFrequency == 'WEEKLY'){
+		document.getElementById("repetitionWeeklySection").style.display='';
+		document.getElementById("repetitionDailySection").style.display='none';
+		document.getElementById("repetitionMonthlySection").style.display='none';
+	}else{
+		document.getElementById("repetitionMonthlySection").style.display='';
+		document.getElementById("repetitionWeeklySection").style.display='none';
+		document.getElementById("repetitionDailySection").style.display='none';
+	}
+}
+
+function showHideRepeatSection(){
+	if(document.getElementById("isRecurring").checked){
+		document.getElementById("repeteSection").style.display='';
+	}else{
+		document.getElementById("repeteSection").style.display='none';
+	}
+}
+
+function viewTimeBlockAvailability(){
+	var selectedDate = null;
+	var attendees = "-1";
+	if(document.getElementById("selectedStartDate") != null &&  document.getElementById("selectedStartDate").value != ""){
+		selectedDate = document.getElementById("selectedStartDate").value;
+	}
+	if(trim(selectedDate)=="" || trim(selectedDate).length == 0){
+		jAlert("Please specify the start date of event");
+		return false;
+	}
+
+	var selectedEmpIds = document.getElementById('assignedAttendeesList');
+	if (selectedEmpIds.length > 0) {
+		for(i = 0; i<selectedEmpIds.length ; i++) {
+			attendees = attendees +  ( attendees == "" ? selectedEmpIds.options[i].value : "*"+ selectedEmpIds.options[i].value);
+		}
+	}
+	if(document.getElementById("addEventToMe").checked){
+		attendees = attendees +"*"+document.getElementById("loginEmpId").value;
+	}
+	window.open(encodeURI("executeTemplate.do?activity=submit&templateName=page/common/TaskEventHandler.htm&initDataVariables=attendees^"+attendees+",selectedDate^"+selectedDate+",extendedDwrMode^viewTimeBlockAvailabilityOnNewTab&displayHeader=false&pageTitle^View blocked time"), '_blank');
+}
+
+function viewTimeBlockAvailabilityOnNewTab(attendees,selectedDate){
+	dwr.util.useLoadingMessage();
+	var filterDtls = attendees+"#"+selectedDate;
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'viewTimeBlockAvailabilityOnNewTab'});
+	adrh.viewAllRecords('TaskEventHandler','viewTimeBlockAvailabilityOnNewTab',filterDtls,'',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+		gridviewScroll();
+	}});
+}
+
+function showHideEmailToNonEmp(){
+	if(document.getElementById("sendEmailToNonEmp").checked){
+		document.getElementById("emailToNonEmpSection").style.display='';
+	}else{
+		document.getElementById("emailToNonEmpSection").style.display='none';
+	}
+}
+
+function setViewModeOfEventsOnsession(viewModeDetails) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'viewEventRequestForOthers'});
+	adrh.executeCall('TaskEventHandler',viewModeDetails,'setViewModeOfEventsOnsession','','', {async:false,callback:function(dwrResponse) {
+	}});
+}
+
+function searchEventAndTask() {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'searchEventAndTask'});
+	adrh.viewAllRecords('TaskEventHandler','searchEventAndTask',"","",{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+		initializeCalendar();
+	}});
+}
+
+function calendarViewOfEventOnSearch(){
+	var _empId = document.getElementById("employeeName_hidden").value;
+	var _searchPharse = document.getElementById("_searchPhrase").value;
+	var _startDate = document.getElementById("_startDate").value;
+	if(_startDate == ""){
+		jAlert("Please specify the start date.");
+		return false;
+	}
+	var _endDate = document.getElementById("_endDate").value;
+	if(_endDate == ""){
+		jAlert("Please specify the end date.");
+		return false;
+	}
+	var filterInfo = _empId+"#"+_startDate+"#"+_endDate;
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'getAllTaskAndEvent'});
+	adrh.viewAllRecords('TaskEventHandler','displayDataOnsearchEventAndTask',filterInfo,_searchPharse,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		closeFancyBox();
+		dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+	}});
+}
+
+function calendarViewOfEventFromShortCut(viewBy){
+	if(viewBy == "self"){
+		window.location.href = "runet.do?activity=submit&mod=calendarViewOfEvent";
+	}else if(viewBy == "subordinates"){
+		window.location.href = "runet.do?activity=submit&mod=calendarViewOfSubordinateEvent";
+	}else if(viewBy == "specificEmp"){
+		if(document.getElementById("subordinatesFilter") != null){
+			document.getElementById("subordinatesFilter").style.display='none';
+		}
+		document.getElementById("specificEmpSection").style.display='';
+		calendarViewOfEventWithoutEmployee(selectedDate, viewBy);
+	}else{
+		var selectedDate = document.getElementById("selectedDate").value;
+		calendarViewOfEvent(selectedDate, viewBy);
+	}
+}
+
+
+function setupEventDialog(subjectLine,locationLine,eventDate,startTime,duration,agenda,empIds,additionalEmailIds) {
+
+	var taskEventMasterTeo= new Object();
+	taskEventMasterTeo.subject=subjectLine;
+	taskEventMasterTeo.location=locationLine;
+	taskEventMasterTeo.calendarDateStart=eventDate;
+	taskEventMasterTeo.startTime=startTime;
+	taskEventMasterTeo.duration=duration;
+	taskEventMasterTeo.description=agenda;
+	taskEventMasterTeo.attendees= empIds +"#"+additionalEmailIds;
+	var teoInfoInString = JSON.stringify(taskEventMasterTeo);
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'addNewTaskEventGlobally'});
+	adrh.viewAllRecords('TaskEventHandler','addNewTaskEventGlobally',"2",teoInfoInString,{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+		initializeCalendar();
+		initializeCKEditor();
+		$('.timeInput').timepicker({showPeriodLabels:false});
+	}});
+}
+
+
+function setupTaskDialog(subjectLine,agenda,empIds) {
+    setupTaskDialog(subjectLine, agenda, empIds, '');
+}
+
+function setupTaskDialog(subjectLine,agenda,empIds,agendaUrl) {
+
+    var taskEventMasterTeo= new Object();
+    taskEventMasterTeo.subject=subjectLine;
+    var description = ""
+    if(agenda != null && agenda.trim().length > 0) {
+        description = agenda;
+    }
+
+    if(agendaUrl != null && agendaUrl.trim().length > 0) {
+        if(description.length > 0)
+            description += '<br>';
+        description += '<a href="'+agendaUrl + '" target="_blank"</a>View record</a>';
+    }
+
+    taskEventMasterTeo.description = description;
+    taskEventMasterTeo.attendees= empIds ;
+    var teoInfoInString = JSON.stringify(taskEventMasterTeo);
+    ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewAllRecords', eventLabel: 'addNewTaskEventGlobally'});
+	adrh.viewAllRecords('TaskEventHandler','addNewTaskEventGlobally',"1",teoInfoInString,{async:defaultAsyncValue,callback:function(dwrResponse) {
+        showFancyBox(dwrResponse.response);
+        initializeCalendar();
+        initializeCKEditor();
+        $('.timeInput').timepicker({showPeriodLabels:false});
+    }});
+}
+
+function setupTaskSequencePlans(){
+    ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'setupTaskSequencePlans', eventLabel: 'setupTaskSequencePlans'});
+	adrh.viewAllRecords('TaskEventHandler', 'setupTaskSequencePlans','','',{async:defaultAsyncValue,callback:function(dwrResponse) {
+        /*
+		showFancyBox(dwrResponse.response);
+        initializeCalendar();
+        initializeCKEditor();
+        $('.timeInput').timepicker({showPeriodLabels:false});
+		*/
+		dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+    }});
+}
+
+function addEditTaskSequenceMaster(taskSeqName){
+    ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'addEditTaskSequenceMaster', eventLabel: 'addEditTaskSequenceMaster'});
+	adrh.viewAllRecords('TaskEventHandler', 'addEditTaskSequenceMaster',taskSeqName,'',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+    }});
+}
+
+function saveTaskSequence(){
+    ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'saveTaskSequence', eventLabel: 'saveTaskSequence'});
+	var abstractObject = new Object();
+
+	abstractObject.taskSeqName = document.getElementById("taskSeqName").value;
+	
+	abstractObject.taskSeqInitiatedBy = document.getElementById("taskSeqInitiatedBy").value;
+	if(document.getElementById("taskSeqInitiatedBy").value == "initiatedBySpecificEmp"){
+		abstractObject.taskSeqInitiatedBy_specificEmployee =  document.getElementById("employeeName_hidden").value;
+		abstractObject.taskSeqInitiatedBy_group ="-1";
+	}else{
+		abstractObject.taskSeqInitiatedBy_group = document.getElementById("appliesToGroup").value;
+		abstractObject.taskSeqInitiatedBy_specificEmployee = "-1";
+	}
+	
+
+	abstractObject.taskSeqApplicableTo = document.getElementById("taskSeqApplicableTo").value;
+	/*abstractObject.taskSeqApplicableTo_query = "TODO - text area to capture the query. Note (this will be done later)";
+	*/
+
+	abstractObject.mode = document.getElementById("mode").value;
+
+	if(document.getElementById("initiationDateRule1").checked) {
+		abstractObject.initiationDateRule = document.getElementById("initiationDateRule1").value;
+	}else if(document.getElementById("initiationDateRule2").checked) {
+		abstractObject.initiationDateRule = document.getElementById("initiationDateRule2").value;
+	}
+	var jsonValues = JSON.stringify(abstractObject);
+
+	adrh.saveRecord('TaskEventHandler', jsonValues, 'saveTaskSequence', 'saigun.calcengine.AbstractObject', '',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		closeFancyBox();
+		displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+		
+		setupTaskSequencePlans();
+    }});
+}
+
+function viewTaskSequenceTasks(taskSeqName) {
+   ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'viewTaskSequenceTasks', eventLabel: 'viewTaskSequenceTasks'});
+	adrh.viewAllRecords('TaskEventHandler', 'viewTaskSequenceTasks', taskSeqName, '',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+    }});
+}
+
+function addEditTaskSequenceTask(taskSeq, taskName) {
+   ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'addEditTaskSequenceTask', eventLabel: 'addEditTaskSequenceTask'});
+	adrh.viewAllRecords('TaskEventHandler', 'addEditTaskSequenceTask', taskSeq + "^" + taskName, '',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		showFancyBox(dwrResponse.response);
+    }});
+}
+
+function saveTaskForSequence(masterTaskName) {
+    ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'saveTaskForSequence', eventLabel: 'saveTaskForSequence'});
+	var abstractObject = new Object();
+
+	abstractObject.taskName = document.getElementById("taskName").value;
+	abstractObject.taskDescription = document.getElementById("taskDescription").value;
+	abstractObject.taskAgenda = document.getElementById("taskAgenda").value;
+	
+	abstractObject.taskDueDate = document.getElementById("taskDueDate").value;
+	abstractObject.taskDueDate_numDaysAfterInitation = document.getElementById("daysAfterInitation_val").value;
+	abstractObject.taskDueDate_numDaysAfterCompletionOfOtherTask = document.getElementById("daysAfterCompletionOfAnotherTask_val").value;
+	abstractObject.taskDueDate_numDaysAfterCompletionOfOtherTask_taskId = document.getElementById("selectedOtherTaskId").value;
+	abstractObject.taskOwner = document.getElementById("taskOwner").value;
+	if(document.getElementById("taskOwner").value == "specificEmployee"){
+		abstractObject.taskOwner_specificEmployeeId =  document.getElementById("employeeName_hidden").value;
+		abstractObject.taskOwner_groupId ="-1";
+	}else{
+		abstractObject.taskOwner_groupId = document.getElementById("appliesToGroup").value;
+		abstractObject.taskOwner_specificEmployeeId = "-1";
+	}
+	abstractObject.sendEmailOnCompletion = document.getElementById("sendEmailOnCompletion").value;
+	if(document.getElementById("sendEmailOnCompletion").value == "specificEmployee"){
+		abstractObject.sendEmailOnCompletion_specificEmployeeId =  document.getElementById("employeeNameEmail_hidden").value;
+		abstractObject.sendEmailOnCompletion_groupId ="-1";
+	}else{
+		abstractObject.sendEmailOnCompletion_groupId = document.getElementById("appliesToGroup_email_notify").value;
+		abstractObject.sendEmailOnCompletion_specificEmployeeId = "-1";
+	}
+
+	var taskId = document.getElementById("taskId").value;
+
+	var jsonValues = JSON.stringify(abstractObject);
+	adrh.saveRecord('TaskEventHandler',jsonValues, 'saveTaskSequenceTask', 'saigun.calcengine.AbstractObject', masterTaskName + '^' + taskId, {async:defaultAsyncValue,callback:function(dwrResponse) {
+		closeFancyBox();
+		displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+		
+		viewTaskSequenceTasks(masterTaskName);
+    }});
+}
+
+
+
+
+function showInitiatedOption(selectedOptionValue) {
+	if(selectedOptionValue == "initiatedBySpecificEmp" || selectedOptionValue == "specificEmployee" ){
+		document.getElementById("optionForSpecificEmp").style.display ="";
+		document.getElementById("optionForGroup").style.display ="none";
+	}else if(selectedOptionValue == "initiatedBySpecificGroup" || selectedOptionValue == "specificGroup" ){
+		document.getElementById("optionForSpecificEmp").style.display ="none";
+		document.getElementById("optionForGroup").style.display ="";
+	}else{
+		document.getElementById("optionForSpecificEmp").style.display ="none";
+		document.getElementById("optionForGroup").style.display ="none";
+	}
+}
+
+function showOptionForTaskComplete(selectedOptionValue) {
+	if(selectedOptionValue == "specificEmployee" ){
+		document.getElementById("optionForSpecificEmp_email").style.display ="";
+		document.getElementById("optionForGroup_email").style.display ="none";
+	}else if(selectedOptionValue == "specificGroup" ){
+		document.getElementById("optionForSpecificEmp_email").style.display ="none";
+		document.getElementById("optionForGroup_email").style.display ="";
+	}else{
+		document.getElementById("optionForSpecificEmp_email").style.display ="none";
+		document.getElementById("optionForGroup_email").style.display ="none";
+	}
+}
+
+function showOptionForDueDate(selectedOptionValue) {
+	if(selectedOptionValue == "daysAfterInitation" ){
+		document.getElementById("optionForDaysAfterInitation").style.display ="";
+		document.getElementById("optionForDaysAfterCompletionOfAnotherTask").style.display ="none";
+	}else if(selectedOptionValue == "daysAfterCompletionOfAnotherTask" ){
+		document.getElementById("optionForDaysAfterInitation").style.display ="none";
+		document.getElementById("optionForDaysAfterCompletionOfAnotherTask").style.display ="";
+	}else{
+		document.getElementById("optionForDaysAfterInitation").style.display ="none";
+		document.getElementById("optionForDaysAfterCompletionOfAnotherTask").style.display ="none";
+	}
+}
+
+function displayTaskSequencePlansForUser(){
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'displayTaskSequencePlansForUser', eventLabel: 'displayTaskSequencePlansForUser'});
+	adrh.viewAllRecords('TaskEventHandler', 'selectTaskPlanForDisplayingTasks', '', '',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+    }});
+}
+
+function selectTaskPlanForDisplayingTasks() {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'selectTaskPlanForDisplayingTasks', eventLabel: 'selectTaskPlanForDisplayingTasks'});
+	var selectedTaskPlan = document.getElementById("taskPlans").value;
+	if(selectedTaskPlan == "-1") {
+		jAlert("Please select a valid plan");
+		return false;
+	}
+	adrh.viewAllRecords('TaskEventHandler', 'selectTaskPlanForDisplayingTasks', selectedTaskPlan, '',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("displayPageContent", dwrResponse.response,{ escapeHtml:false });
+    }});
+}
+
+
+function invokeSearchPageOnMulti(indexValue){
+	popupBlockerChecker.check(window.open("", "EmpXtrackSearchWindow", features));			
+	document.empCommonSearchWizardForm.target ="EmpXtrackSearchWindow";
+	document.empCommonSearchWizardForm.parentFormName.value = "ExecuteTemplateForm";
+	document.empCommonSearchWizardForm.listName.value = "assignedEmployeeList_"+indexValue;
+	document.empCommonSearchWizardForm.listCount.value = "noOfEmployees";
+	document.empCommonSearchWizardForm.searchName.value = "search";
+	document.empCommonSearchWizardForm.userType.value = "admin";
+	document.empCommonSearchWizardForm.multiSelection.value = "true";
+	document.empCommonSearchWizardForm.submit();
+}
+
+function removeFromListMulti(curTaskId) {
+	var curAssignedEmployeeList = document.getElementById("assignedEmployeeList_"+curTaskId).options;
+	if ( curAssignedEmployeeList.length == 0) {
+		jAlert(a_appraisalInit_noEmpAvailable);
+	} else {
+	  var selected = curAssignedEmployeeList.selectedIndex;
+	  if (selected == -1) {
+		 jAlert("Please select the employee");
+		 return false;
+	  }
+	   jConfirm("Are you sure want to remove selected employee?", '', function(r)
+		{
+			r.close();
+			for(i = 0; i < curAssignedEmployeeList.length ; i++)
+			{
+				if(curAssignedEmployeeList[i].selected){
+					curAssignedEmployeeList[i]=null;
+					i--;
+				}
+			}
+		});
+   }
+   return false;
+}
+
+function getRequiredDataMulti(selectedEmployees,indexValue){
+	var frm =document.ExecuteTemplateForm;
+	var selectedEmps;
+	selectedEmps = getEmployeesMulti(selectedEmployees,"select-multiple");
+	var searchName = document.getElementById('searchKey_'+indexValue).value;
+	if(!isNaN(searchName)){
+		frm.searchName.value = "";
+		return false;
+	}
+	var searchEmpId= document.getElementById('searchName_'+indexValue+'_hidden').value;
+	var newOption 	= document.createElement("OPTION");
+	if(searchName != "" && searchEmpId != ""){
+		newOption.text  = searchName;
+		newOption.value = searchEmpId;
+
+		if(alreadyAddedMulti(selectedEmps,searchEmpId)){
+			selectedEmps.options.add(newOption,selectedEmps.length);
+		}
+	}
+	document.getElementById('searchKey_'+indexValue).value = "";
+}
+
+function alreadyAddedMulti(selectedEmps,selectedEmpId){
+	for(var i=0; i<selectedEmps.length; i++){
+		if(selectedEmpId == "" || selectedEmpId == selectedEmps[i].value)
+			return false;
+	}
+	return true;
+}
+
+function getEmployeesMulti(source,elementType){
+	for (i = 0; i < document.ExecuteTemplateForm.elements.length; i++){
+		elem = document.ExecuteTemplateForm.elements[i];
+		if(elem.type == elementType && elem.name.indexOf(source) != -1)  {
+			return elem;
+		}
+	}
+}
+function initiateTasks() {
+    ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'saveTaskForSequence', eventLabel: 'initiateTasks'});
+	var abstractObject = new Object();
+	abstractObject.selectedTaskPlan = document.getElementById("taskPlans").value;
+	var applyTaskTo = document.getElementById("_applyTaskTo").value;
+	// Contains either empids or searchGroupId
+	if(applyTaskTo == "applicableToEmployees")
+	{
+		var executeTemplateForm = document.ExecuteTemplateForm;
+		var applicableToEmployees = "";
+		for(i = 0; i < executeTemplateForm.assignedEmployeeList.length ; i++){
+			applicableToEmployees = applicableToEmployees + ( applicableToEmployees == "" ? executeTemplateForm.assignedEmployeeList.options[i].value : ","+ executeTemplateForm.assignedEmployeeList.options[i].value);
+		}
+		abstractObject.applyTaskToValue = applicableToEmployees;
+	}else if(applyTaskTo == "applicableToGroup"){
+		abstractObject.applyTaskToValue = document.getElementById("appliesToGroup").value;
+	}
+	var __existingTaskIdsOnSelectedPlan = document.getElementById("__existingTaskIdsOnSelectedPlan").value.split(",");
+	var employeeAssignments = new Array();
+	for(i = 0; i < __existingTaskIdsOnSelectedPlan.length ; i++){
+		var curTaskId = __existingTaskIdsOnSelectedPlan[i];
+		var curTaskAssignedMode = document.getElementById("_curTaskAssignedMode_"+curTaskId).value;
+		var curTaskAssignedTo = "-1";
+		if(curTaskAssignedMode == "assignedDuringCreation"){
+			var curTaskAssignedEmployeeList = document.getElementById("assignedEmployeeList_"+curTaskId).options;
+			var empidVal = "";
+			for(j = 0; j < curTaskAssignedEmployeeList.length ; j++){
+				empidVal = empidVal + ( empidVal == "" ? curTaskAssignedEmployeeList[j].value : ","+ curTaskAssignedEmployeeList[j].value);
+			}
+			curTaskAssignedTo =  empidVal;
+		}
+		employeeAssignments[i] = new Object();
+		employeeAssignments[i].taskId = curTaskId;
+		employeeAssignments[i].assignedTo = curTaskAssignedTo;
+		employeeAssignments[i].taskComments = document.getElementById("_curTaskNotes_" + curTaskId).value;
+		
+	}
+	abstractObject.employeeAssignments = employeeAssignments;
+	var jsonValues = JSON.stringify(abstractObject);
+	
+	adrh.saveRecord('TaskEventHandler', jsonValues, 'initiateTasks', 'saigun.calcengine.AbstractObject', '', {async:defaultAsyncValue,callback:function(dwrResponse) {
+		displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+		
+    }});
+}
+
+
+
+function deleteTaskSequence(taskMaster) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'executeCall', eventLabel: 'deleteTaskSequence'});
+	var msg = 'Are you sure you want to delete the task plan?';
+	jConfirm(msg, '', function(r)
+	{
+		r.close();
+		adrh.executeCall('TaskEventHandler', taskMaster,'deleteTaskSequence','','',{async:defaultAsyncValue,callback:function(dwrResponse){
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+			
+			setupTaskSequencePlans();
+		}});
+	});
+
+}
+function deleteTaskSequenceTask(taskMaster,taskEventId) {
+	ga('send', 'event', { eventCategory: 'TaskEventHandler', eventAction: 'executeCall', eventLabel: 'deleteTaskSequenceTask'});
+	var msg = 'Are you sure you want to delete the task sequence?';
+	jConfirm(msg, '', function(r)
+	{
+		r.close();
+		adrh.executeCall('TaskEventHandler', taskEventId,'deleteTaskSequenceTask','',taskMaster,{async:defaultAsyncValue,callback:function(dwrResponse){
+			displayConfirmationMsg("errorMsg", dwrResponse.notificationMsg,"success");
+			
+			viewTaskSequenceTasks(taskMaster);
+		}});
+	});
+
+}
+
+function viewTaskEventEmployee() {
+	var selectedDate = null;
+	var attendees = "-1";
+	var filters="";
+	var loginEmpId=document.getElementById("loginEmpId").value;
+	var dupLoginEmpId="false";
+	var selectedEmpIds = document.getElementById('assignedAttendeesList');
+	if (selectedEmpIds.length > 0) {
+		 attendees = "";
+		for(i = 0; i<selectedEmpIds.length ; i++) {
+			attendees = attendees +  ( attendees == "" ? selectedEmpIds.options[i].value : ","+ selectedEmpIds.options[i].value);
+		}
+	}
+	if(document.getElementById("addEventToMe").checked){
+		for(i = 0; i<selectedEmpIds.length ; i++) {
+			if(selectedEmpIds.options[i].value == loginEmpId)
+				dupLoginEmpId="true";
+		}
+		if(dupLoginEmpId == "false")
+			attendees = attendees +","+loginEmpId;
+	}
+	if(document.getElementById("selectedStartDate") != null &&  document.getElementById("selectedStartDate").value != ""){
+		selectedDate = document.getElementById("selectedStartDate").value;
+	}else{
+		jAlert("Please specify the start date of event");
+		return false;
+	}
+	filters = selectedDate+"#"+attendees;
+	adrh.viewAllRecords('TaskEventHandler', 'viewTaskEventEmployee', filters, '',{async:defaultAsyncValue,callback:function(dwrResponse) {
+		dwr.util.setValue("displayTaskEventAvailability", dwrResponse.response,{ escapeHtml:false });
+    }});
+
+}
+

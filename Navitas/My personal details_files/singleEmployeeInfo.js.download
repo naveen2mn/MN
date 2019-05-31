@@ -1,0 +1,1 @@
+function notRenderUserImage(c,b){var a=document.getElementById("user_"+c+"_"+b);a.style.display="none"}function renderUserImage(c,b){var a=document.getElementById("user_"+c+"_"+b);a.style.display="block"};

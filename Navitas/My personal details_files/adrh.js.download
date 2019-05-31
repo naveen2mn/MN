@@ -1,0 +1,195 @@
+if (typeof dwr == 'undefined' || dwr.engine == undefined) throw new Error('You must include DWR engine before including this file');
+
+(function() {
+if (dwr.engine._getObject("adrh") == undefined) {
+var p;
+
+p = {};
+p._path = '/empxtrack/dwr';
+
+
+
+
+
+
+
+
+
+
+p.runWorkflow = function(p0, p1, p2, p3, p4, p5, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'runWorkflow', arguments);
+};
+
+
+
+
+
+
+
+
+
+
+
+p.runWorkflow = function(p0, p1, p2, p3, p4, p5, p6, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'runWorkflow', arguments);
+};
+
+
+
+
+
+
+
+
+
+
+p.viewRecordForEdit = function(p0, p1, p2, p3, p4, p5, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'viewRecordForEdit', arguments);
+};
+
+
+
+
+
+
+
+
+
+p.viewRecordForEdit = function(p0, p1, p2, p3, p4, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'viewRecordForEdit', arguments);
+};
+
+
+
+
+
+
+
+
+
+
+p.downLoadDataInCSV = function(p0, p1, p2, p3, p4, p5, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'downLoadDataInCSV', arguments);
+};
+
+
+
+
+
+
+
+
+
+
+p.runCustomReport = function(p0, p1, p2, p3, p4, p5, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'runCustomReport', arguments);
+};
+
+
+
+
+
+
+
+
+
+
+
+p.runCustomReport = function(p0, p1, p2, p3, p4, p5, p6, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'runCustomReport', arguments);
+};
+
+
+
+
+
+
+
+
+p.viewAllRecords = function(p0, p1, p2, p3, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'viewAllRecords', arguments);
+};
+
+
+
+
+
+
+
+
+
+p.saveRecord = function(p0, p1, p2, p3, p4, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'saveRecord', arguments);
+};
+
+
+
+
+
+
+
+
+
+
+p.executeCall = function(p0, p1, p2, p3, p4, p5, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'executeCall', arguments);
+};
+
+
+
+
+
+
+
+
+
+p.executeCall = function(p0, p1, p2, p3, p4, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'executeCall', arguments);
+};
+
+
+
+
+
+
+
+
+
+p.executeCallWithJsonOutput = function(p0, p1, p2, p3, p4, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'executeCallWithJsonOutput', arguments);
+};
+
+
+
+
+
+
+
+p.showRenderTableDataElement = function(p0, p1, p2, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'showRenderTableDataElement', arguments);
+};
+
+
+
+
+
+
+
+
+
+p.showDataElementWithPageNavigation = function(p0, p1, p2, p3, p4, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'showDataElementWithPageNavigation', arguments);
+};
+
+
+
+
+
+p.debug = function(p0, callback) {
+return dwr.engine._execute(p._path, 'adrh', 'debug', arguments);
+};
+
+dwr.engine._setObject("adrh", p);
+}
+})();
+
